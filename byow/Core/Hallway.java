@@ -34,7 +34,7 @@ public class Hallway {
     public void drawHallway(TETile[][] world) {
         for (int i = start.y(); i < start.y() - 2; i++) {
             for (int j = start.x(); j < length; i++) {
-
+                world[0][0] = null;
             }
         }
     }
