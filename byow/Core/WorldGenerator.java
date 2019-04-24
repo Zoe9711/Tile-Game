@@ -3,17 +3,14 @@ package byow.Core;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
 public class WorldGenerator {
     private int width;
     private int height;
     private int seed;
     private TETile[][] world;
-    private List<Room> roomList;
+    private ArrayList<Room> roomList;
     private HashMap<Integer, Room> roomMap;
     private List<Hallway> hallwayList;
     private RoomGenerator roomGenerator = new RoomGenerator();
@@ -65,7 +62,7 @@ public class WorldGenerator {
 
     public void addHallways() {
         //List<Room> newList = roomGenerator.sortedList(); //fix this - Null pointer Exception
-        List<Room> newList = roomGenerator.getRoomList(); //Alternate List for now.
+        List<Room> newList = roomGenerator.sortedList(this.roomList, this.roomMap); //Alternate List for now.
         for (int i = 0; i < newList.size() - 1; i++) {
             hallGenerator.addHallwayPath(this.world, newList.get(i), newList.get(i + 1));
         }

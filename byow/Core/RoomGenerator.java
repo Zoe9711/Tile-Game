@@ -6,11 +6,11 @@ import byow.TileEngine.Tileset;
 import java.util.*;
 
 public class RoomGenerator {
-    private List<Room> roomList; //list of hallways for cleaning
+    private ArrayList<Room> roomList; //list of hallways for cleaning
     private HashMap<Integer, Room> roomMap;
 
     public RoomGenerator() {
-        this.roomList = new LinkedList<>();
+        this.roomList = new ArrayList<>();
         this.roomMap = new HashMap<>();
     }
 
@@ -19,7 +19,7 @@ public class RoomGenerator {
     }
 
     /** Returns list of rooms generated. */
-    public List<Room> getRoomList() {
+    public ArrayList<Room> getRoomList() {
         return this.roomList;
     }
 
@@ -30,15 +30,16 @@ public class RoomGenerator {
         roomToAdd.addRoom(world, p, w, h);
     }
 
-    public List<Room> sortedList() {
+    public static List<Room> sortedList(ArrayList<Room> roomList, HashMap<Integer, Room> roomMap) {
         ArrayList<Room> newList = new ArrayList<>();
         ArrayList<Integer> listX = new ArrayList<>();
-        for (Room r : this.roomList) {
+        for (Room r : roomList) {
             listX.add(r.getStartX());
         }
         while (listX.size() != 0) {
             int smallEst = minIndex(listX);
-            newList.add(this.roomMap.get(smallEst));
+            int smalleSt = listX.get(smallEst);
+            newList.add(roomMap.get(smalleSt));
             listX.remove(smallEst);
         }
         return newList;
@@ -65,4 +66,24 @@ public class RoomGenerator {
     private static int minIndex(List<Integer> listX) {
         return listX.indexOf(Collections.min(listX));
     }
+/*
+    public static void main(String[] args) {
+        Position p1 = new Position(9, 9);
+        Room r1 = new Room(p1, 2, 2);
+        Position p2 = new Position(5, 3);
+        Room r2 = new Room(p2, 2, 2);
+        Position p3 = new Position(3, 5);
+        Room r3 = new Room(p3, 2, 2);
+        ArrayList<Room> roomList = new ArrayList<>();
+        roomList.add(r1);
+        roomList.add(r2);
+        roomList.add(r3);
+        HashMap<Integer, Room> roomMap = new HashMap<>();
+        roomMap.put(9, r1);
+        roomMap.put(5, r2);
+        roomMap.put(3, r3);
+        List<Room> newList = sortedList(roomList, roomMap);
+        System.out.println(newList);
+    }
+    */
 }
