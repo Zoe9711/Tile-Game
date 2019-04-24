@@ -2,6 +2,8 @@ package byow.Core;
 
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
+import byow.TileEngine.Tileset;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -40,7 +42,6 @@ public class Engine {
      * @return the 2D TETile[][] representing the state of the world
      */
     public TETile[][] interactWithInputString(String input) {
-        // TODO: Fill out this method so that it run the engine using the input
         // passed in as an argument, and return a 2D tile representation of the
         // world that would have been drawn if the same inputs had been given
         // to interactWithKeyboard().
@@ -48,9 +49,14 @@ public class Engine {
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
 
+        ter.initialize(WIDTH, HEIGHT);
         TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
+        for (int x = 0; x < WIDTH; x += 1) {
+            for (int y = 0; y < HEIGHT; y += 1) {
+                finalWorldFrame[x][y] = Tileset.NOTHING;
+            }
+        }
         if (!(input.isEmpty())) {
-
             ArrayList<Character> charArray = new ArrayList<>();
             for (char ch : input.toCharArray()) {
                 charArray.add(ch);
@@ -74,12 +80,13 @@ public class Engine {
                 Integer seed = Integer.valueOf(numbersToParse);
                 WorldGenerator newWorld = new WorldGenerator(WIDTH, HEIGHT, seed);
                 Random random = new Random(seed);
-                newWorld.addRooms(random.nextInt() + 1);
+                //make up to 50 random rooms
+                newWorld.addRooms(RandomUtils.uniform(random, 50) + 1);
                 newWorld.addHallways();
+                newWorld.cleanAndFill();
                 finalWorldFrame = newWorld.getTeTile();
             }
         }
-        ter.initialize(WIDTH, HEIGHT);
         ter.renderFrame(finalWorldFrame);
         return finalWorldFrame;
     }

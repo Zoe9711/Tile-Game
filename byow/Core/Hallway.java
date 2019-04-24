@@ -1,10 +1,11 @@
 package byow.Core;
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
+import byow.TileEngine.Tileset;
 
 public class Hallway {
-    private Position start; //left or top of hall: one pixel away from the last wall
-    private Position end; //right or bottom of hall: one pixel away from the last wall
+    private Position start; //left or bottom of hall: one pixel away from the last wall
+    private Position end; //right or top of hall: one pixel away from the last wall
     private int length; //does not include start and end points
     private boolean isHorizontal; //vertical or horizontal hallway
 
@@ -32,19 +33,17 @@ public class Hallway {
     }
 
     public void addHallway(TETile[][] world) {
+        //NOTE: UNCOMMENTING BELOW--sometimes--RESULTS IN BLANK WORLD (idk why lmao, plz send help)
         if (isHorizontal) {
-            for (int i = 0; i < 2; i++) {
-                for (int j = 0; j < length; i++) {
-                    //Do stuff :/
-                }
+            for (int i = start.x(); i < end.x(); i++) {
+                world[i][start.y() + 1] = Tileset.WALL;
+                world[i][start.y() - 1] = Tileset.WALL;
             }
         } else {
-            for (int i = 0; i < 2; i++) {
-                for (int j = 0; j < length; i++) {
-                    //Do stuff :/
-                }
+            for (int i = start.y(); i < end.y(); i++) {
+                world[start.x() + 1][i] = Tileset.WALL;
+                world[start.x() - 1][i] = Tileset.WALL;
             }
-
         }
     }
 

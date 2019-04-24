@@ -60,29 +60,10 @@ public class Room {
         }
     }
 
-    private ArrayList<Position> roomSpace(Room r) {
-        ArrayList<Position> space = new ArrayList<>();
-        for (int i = 1; i < r.getWidth() - 1; i++) {
-            for (int j = 1; j < r.getHeight() - 1; j++) {
-                space.add(new Position(r.getPosition().x() + i, r.getPosition().y() + j));
-            }
-        }
-        return space;
-    }
-
     public Position ranPosInRoom() {
         Random random = new Random();
         int ranX = random.nextInt(this.getWidth() - 2) + this.getPosition().x() + 1;
         int ranY = random.nextInt(this.getHeight() - 2) + this.getPosition().y() + 1;
         return new Position(ranX, ranY);
     }
-
-    public void fillAll(TETile[][] world, ArrayList<Room> roomList) {
-        for (Room r : roomList) {
-            for (Position p : roomSpace(r)) {
-                world[p.x()][p.y()] = Tileset.FLOOR;
-            }
-        }
-    }
-
 }

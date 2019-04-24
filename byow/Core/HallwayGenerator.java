@@ -28,8 +28,7 @@ public class HallwayGenerator {
      * Note 3: This will only work if method is called iteratively on sorted list, due
      * to start and end Positions.
      * */
-    public List<Hallway> addHallwayPath(TETile[][] world, Room start, Room end) {
-        List<Hallway> hwList = new LinkedList<>();
+    public void addHallwayPath(TETile[][] world, Room start, Room end) {
         //randomly selecting two positions in the two rooms respectively
         Position r1 = start.ranPosInRoom();
         Position r2 = end.ranPosInRoom();
@@ -45,7 +44,7 @@ public class HallwayGenerator {
         Position endH = new Position(r2.x(), r2.y()); //the larger x coordinate
         Hallway hallHToAdd = new Hallway(startH, endH, endH.x() - startH.x(), true);
         hallHToAdd.addHallway(world);
-        hwList.add(hallHToAdd);
+        this.hallwayList.add(hallHToAdd);
 
         if (r1.y() > r2.y()) { //ensure r1 has smaller y coordinate
             //Position rTemp = r1;
@@ -56,11 +55,29 @@ public class HallwayGenerator {
         //draw vertical
         Position startV = r1; //the smaller y coordinate
         Position endV = new Position(endH.x(), endH.y() + 1); //the larger y coordinate
-        Hallway hallYToAdd = new Hallway(startV, endV, endV.y() - startV.y(), false);
-        hallYToAdd.addHallway(world);
-        hwList.add(hallYToAdd);
+        Hallway hallVToAdd = new Hallway(startV, endV, endV.y() - startV.y(), false);
+        hallVToAdd.addHallway(world);
+        this.hallwayList.add(hallVToAdd);
+    }
 
-        return hwList;
+    public void fillAll(TETile[][] world) {
+        for (Hallway h : this.hallwayList) {
+            //NOTE: do stuff here with this.world, make sure about the orientations!
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //        /** Other Solution: "Please Bear With Mae." */
@@ -73,8 +90,7 @@ public class HallwayGenerator {
 //        } else { //diagonal rooms
 //            addDiagonalHallway(world, start, end);
 //        }
-    }
-
+//
 //    private void addHorizontalHallway(TETile[][] world, Room start, Room end) {
 //        //Start room is on the right of End room
 //        Room right = start;
