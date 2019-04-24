@@ -12,10 +12,11 @@ public class HallwayGenerator {
         this.hallwayList = new LinkedList<>();
     }
 
+
+    /** Returns list of hallways generated. */
     public List<Hallway> getHallwayList() {
         return this.hallwayList;
     }
-
 
     /**
      * Adds either ONE hallway for vertical/horizontal rooms, or TWO for diagonal rooms.
@@ -27,33 +28,35 @@ public class HallwayGenerator {
      * to start and end Positions.
      * */
     public void addHallwayPath(TETile[][] world, Room start, Room end) {
-        Room right = start;
-        Room left = end;
-        //Room above = start;
-        Room below = end;
-        if (end.getStartX() > start.getStartX()) { //Start room is actually on left; adjust for math.
-            right = end;
-            left = start;
-        }
-        if (end.getStartY() > start.getStartY()) { //Start room is actually below; adjust for math.
-            //above = end;
-            below = start;
+        //randomly selecting two positions in the two rooms respectively
+        Position r1 = start.ranPosInRoom();
+        Position r2 = end.ranPosInRoom();
+
+        if (r1.x() > r2.x()) { //ensure r1 has smaller x coordinate
+            Position rTemp = r1;
+            r1 = r2;
+            r2 = rTemp;
         }
 
         //draw horizontal hallway first
-        Position startH = left.getPosition(); //the smaller x coordinate
-        Position endH = new Position(right.getPosition().x(), left.getPosition().y()); //the larger x coordinate
+        Position startH = r1; //the smaller x coordinate
+        Position endH = new Position(r2.x(), r2.y()); //the larger x coordinate
         Hallway hallHToAdd = new Hallway(startH, endH, endH.x() - startH.x(), true);
         hallHToAdd.addHallway(world);
         hallwayList.add(hallHToAdd);
 
+        if (r1.y() > r2.y()) { //ensure r1 has smaller y coordinate
+            //Position rTemp = r1;
+            r1 = r2;
+            //r2 = rTemp;
+        }
+
         //draw vertical
-        Position startV = below.getPosition(); //the smaller y coordinate
-        Position endV = endH; //the larger y coordinate
+        Position startV = r1; //the smaller y coordinate
+        Position endV = new Position(endH.x(), endH.y() + 1); //the larger y coordinate
         Hallway hallYToAdd = new Hallway(startV, endV, endV.y() - startV.y(), false);
         hallYToAdd.addHallway(world);
         hallwayList.add(hallYToAdd);
-
 
 
 
