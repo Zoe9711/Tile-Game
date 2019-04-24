@@ -11,7 +11,7 @@ import java.util.HashMap;
 
 
 public class Room {
-    private HashMap<Integer, Room> roomMap = new HashMap<>();
+    private HashMap<Integer, Room> roomMap;
     private Position p; //bottom left corner of the room, wall
     private int width;  //including the wall
     private int height; //including the wall
@@ -48,6 +48,10 @@ public class Room {
 
     public int getStartX() {
         return this.startX;
+    }
+
+    public HashMap<Integer, Room> getMap() {
+        return this.roomMap;
     }
 //
 //    public int getStartY() {
@@ -97,7 +101,7 @@ public class Room {
         return new Position(ranX, ranY);
     }
 
-    public ArrayList<Room> sortedList(ArrayList<Room> roomList) {
+    public static ArrayList<Room> sortedList(ArrayList<Room> roomList, HashMap<Integer, Room> roomMap) {
         ArrayList<Room> newList = new ArrayList<>();
         ArrayList<Integer> listX = new ArrayList<>();
         for (Room r : roomList) {
@@ -111,7 +115,7 @@ public class Room {
         return newList;
     }
 
-    private int minIndex(ArrayList<Integer> listX) {
+    private static int minIndex(ArrayList<Integer> listX) {
         return listX.indexOf(Collections.min(listX));
     }
 

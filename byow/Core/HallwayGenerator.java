@@ -2,6 +2,7 @@ package byow.Core;
 
 import byow.TileEngine.TETile;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class HallwayGenerator {
      * Note 3: This will only work if method is called iteratively on sorted list, due
      * to start and end Positions.
      * */
-    public void addHallwayPath(TETile[][] world, Room start, Room end) {
+    public static void addHallwayPath(TETile[][] world, Room start, Room end, ArrayList<Hallway> hwList) {
         //randomly selecting two positions in the two rooms respectively
         Position r1 = start.ranPosInRoom();
         Position r2 = end.ranPosInRoom();
@@ -43,7 +44,7 @@ public class HallwayGenerator {
         Position endH = new Position(r2.x(), r2.y()); //the larger x coordinate
         Hallway hallHToAdd = new Hallway(startH, endH, endH.x() - startH.x(), true);
         hallHToAdd.addHallway(world);
-        hallwayList.add(hallHToAdd);
+        hwList.add(hallHToAdd);
 
         if (r1.y() > r2.y()) { //ensure r1 has smaller y coordinate
             //Position rTemp = r1;
@@ -56,7 +57,7 @@ public class HallwayGenerator {
         Position endV = new Position(endH.x(), endH.y() + 1); //the larger y coordinate
         Hallway hallYToAdd = new Hallway(startV, endV, endV.y() - startV.y(), false);
         hallYToAdd.addHallway(world);
-        hallwayList.add(hallYToAdd);
+        hwList.add(hallYToAdd);
 
 
 //        /** Other Solution: "Please Bear With Mae." */

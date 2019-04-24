@@ -2,11 +2,9 @@ package byow.Core;
 
 import byow.TileEngine.TETile;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-import byow.Core.Room;
 
 public class WorldGenerator {
     private int width;
@@ -15,6 +13,7 @@ public class WorldGenerator {
     private TETile[][] world;
     private ArrayList<Room> roomList;
     private HashMap<Integer, Room> roomMap;
+    private ArrayList<Hallway> hallwayList;
 
     public WorldGenerator(int w, int h, int seed) {
 
@@ -52,8 +51,11 @@ public class WorldGenerator {
         return this.roomList;
     }
 
-    public TETile[][] getWorld() {
-        return this.world;
+    public void addHallway() {
+        ArrayList<Room> newList = Room.sortedList(this.roomList, this.roomMap);
+        for (int i = 0; i < newList.size() - 1; i++) {
+            HallwayGenerator.addHallwayPath(this.world, newList.get(i), newList.get(i + 1), this.hallwayList);
+        }
     }
 
 }
