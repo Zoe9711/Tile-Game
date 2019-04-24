@@ -90,10 +90,10 @@ public class Room {
         return space;
     }
 
-    public Position ranPosInRoom(Room r) {
+    public Position ranPosInRoom() {
         Random random = new Random();
-        int ranX = random.nextInt(r.getWidth() - 2) + r.getPosition().x() + 1;
-        int ranY = random.nextInt(r.getHeight() - 2) + r.getPosition().y() + 1;
+        int ranX = random.nextInt(this.getWidth() - 2) + this.getPosition().x() + 1;
+        int ranY = random.nextInt(this.getHeight() - 2) + this.getPosition().y() + 1;
         return new Position(ranX, ranY);
     }
 
