@@ -50,8 +50,8 @@ public class WorldGenerator {
     public void addRooms(int NumOfRoom) {
         Random random = new Random(seed());
         for (int i = 0; i < NumOfRoom; i++) {
-            int w = random.nextInt(8) + 3;
-            int h = random.nextInt(8) + 3;
+            int w = random.nextInt(8) + 4;
+            int h = random.nextInt(8) + 4;
             int posX = random.nextInt(width() - w);
             int posY = random.nextInt(height() - h);
             this.roomGenerator.addRoom(this.world, new Position(posX, posY), w, h);
