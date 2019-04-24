@@ -35,12 +35,12 @@ public class Hallway {
     public void addHallway(TETile[][] world) {
         //NOTE: UNCOMMENTING BELOW--sometimes--RESULTS IN BLANK WORLD (idk why lmao, plz send help)
         if (isHorizontal) {
-            for (int i = start.x(); i < end.x(); i++) {
+            for (int i = start.x(); i <= end.x(); i++) {
                 world[i][start.y() + 1] = Tileset.WALL;
                 world[i][start.y() - 1] = Tileset.WALL;
             }
         } else {
-            for (int i = start.y(); i < end.y(); i++) {
+            for (int i = start.y(); i <= end.y(); i++) {
                 world[start.x() + 1][i] = Tileset.WALL;
                 world[start.x() - 1][i] = Tileset.WALL;
             }

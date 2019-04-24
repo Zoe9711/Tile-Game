@@ -46,15 +46,17 @@ public class HallwayGenerator {
         hallHToAdd.addHallway(world);
         this.hallwayList.add(hallHToAdd);
 
-        if (r1.y() > r2.y()) { //ensure r1 has smaller y coordinate
-            //Position rTemp = r1;
-            r1 = r2;
-            //r2 = rTemp;
+
+
+        if (endH.y() > r2.y()) { //ensure r1 has smaller y coordinate
+            Position rTemp = endH;
+            endH = r2;
+            r2 = rTemp;
         }
 
         //draw vertical
-        Position startV = r1; //the smaller y coordinate
-        Position endV = new Position(startV.x(), endH.y() + 1); //the larger y coordinate
+        Position startV = endH; //the smaller y coordinate
+        Position endV = new Position(startV.x(), r2.y() + 1); //the larger y coordinate
         Hallway hallVToAdd = new Hallway(startV, endV, endV.y() - startV.y(), false);
         hallVToAdd.addHallway(world);
         this.hallwayList.add(hallVToAdd);
