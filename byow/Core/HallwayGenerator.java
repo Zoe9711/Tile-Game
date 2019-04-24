@@ -30,12 +30,14 @@ public class HallwayGenerator {
         int roomOrientation = roomOrientation(start, end);
 
         if (roomOrientation == 0) { //horizontal rooms
+            if (start.getStartX() < end.getStartX()) { //start room is on the left
 
-            //Hallway hallToAdd = new Hallway(startPos, endPos, length, true);
-            //hallwayList.add(hallToAdd);
+            } else { //end room is on the left
+
+            }
+//            Hallway hallToAdd = new Hallway(startPos, endPos, length, true);
+//            hallwayList.add(hallToAdd);
         } else if (roomOrientation == 1) { //vertical rooms
-            //Hallway hallToAdd = new Hallway(startPos, endPos, length, true);
-            //hallwayList.add(hallToAdd);
 
         } else { //diagonal rooms
             if (starterRoom(start, end) == 0) { //start is above
@@ -43,7 +45,6 @@ public class HallwayGenerator {
             } else { //end is above
 
             }
-
         }
     }
 
@@ -59,12 +60,13 @@ public class HallwayGenerator {
     private int roomOrientation(Room a, Room b) {
         if (a.getEndY() >= b.getStartY() && a.getStartY() <= b.getEndY()) {
             return 0;
-        } else if (a.getEndX() <= b.getStartX() && a.getStartX() >= b.getEndX()) {
+        } else if (a.getEndX() >= b.getStartX() && a.getStartX() <= b.getEndX()) {
             return 1;
         } else {
             return -1;
         }
     }
+
 
     /**
      * Finds which room is the start room to make the "upside-down L shaped pathway";
@@ -72,12 +74,14 @@ public class HallwayGenerator {
      *
      * Returns
      *
-     * 0: a is the start.
-     * 1: b is the start.
+     * 0: a is the start, and on the left.
+     * 1: a is the start, and on the right.
+     * 2: b is the start, and on the left.
+     * 3: b is the start, and on the right.
      *
      * Note: "a" should be "start", "b" should be "end" for consistency.
      * */
     private int starterRoom(Room a, Room b) {
-        return 0;
+
     }
 }

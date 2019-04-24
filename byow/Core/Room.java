@@ -24,8 +24,8 @@ public class Room {
         this.width = w;
         this.height = h;
 
-        this.startX = p.x() - 1;
-        this.endX = startX - width + 3;
+        this.startX = p.x() + 1;
+        this.endX = startX + width + 3;
         this.startY = p.y() + 1;
         this.endY = startY + height - 3;;
     }
