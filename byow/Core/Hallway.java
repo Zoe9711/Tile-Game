@@ -3,14 +3,19 @@ import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 
 public class Hallway {
-    private Position start;
-    private Position end;
-    private int length;
+    private Position start; //left or top of hall: one pixel away from the last wall
+    private Position end; //right or bottom of hall: one pixel away from the last wall
+    private int length; //does not include start and end points
+    private boolean isHorizontal; //vertical or horizontal hallway
 
-    public Hallway(Position s, Position e, int l) {
+    /**
+     * Adds either ONE hallway for vertical/horizontal rooms, or TWO for diagonal rooms.
+     * */
+    public Hallway(Position s, Position e, int l, boolean h) {
         this.start = s;
         this.end = e;
         this.length = l;
+        this.isHorizontal = h;
     }
 
     public Position start() {
@@ -25,8 +30,7 @@ public class Hallway {
         return this.length;
     }
 
-    public void addHallway() {
-
+    public boolean isHorizontal() {
+        return this.isHorizontal;
     }
-
 }

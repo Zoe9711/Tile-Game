@@ -19,6 +19,18 @@ public class Room {
         this.height = h;
     }
 
+    public Position getPosition() {
+        return this.p;
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
+
 
     public void addRoom(TETile[][] world, Position p, int w, int h) {
         for (int i = 0; i < w; i++ ) {
