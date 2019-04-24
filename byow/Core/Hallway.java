@@ -30,4 +30,12 @@ public class Hallway {
     public boolean isHorizontal() {
         return this.isHorizontal;
     }
+
+    public void drawHallway(TETile[][] world) {
+        for (int i = start.y(); i < start.y() - 2; i++) {
+            for (int j = start.x(); j < length; i++) {
+
+            }
+        }
+    }
 }
