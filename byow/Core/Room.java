@@ -1,17 +1,15 @@
 package byow.Core;
 
-import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
-import java.util.HashMap;
+
 
 
 public class Room {
-    private HashMap<Integer, Room> roomMap;
     private Position p; //bottom left corner of the room, wall
     private int width;  //including the wall
     private int height; //including the wall
@@ -50,24 +48,7 @@ public class Room {
         return this.startX;
     }
 
-    public HashMap<Integer, Room> getMap() {
-        return this.roomMap;
-    }
-//
-//    public int getStartY() {
-//        return this.startY;
-//    }
-//
-//    public int getEndX() {
-//        return this.endX;
-//    }
-//
-//    public int getEndY() {
-//        return this.endY;
-//    }
-
-
-    public static void addRoom(TETile[][] world, Position p, int w, int h, ArrayList<Room> roomList, HashMap<Integer, Room> roomMap) {
+    public void addRoom(TETile[][] world, Position p, int w, int h) {
         for (int i = 0; i < w; i++ ) {
             world[p.x() + i][p.y()] = Tileset.WALL;
             world[p.x() + i][p.y() + h - 1] = Tileset.WALL;
@@ -77,11 +58,6 @@ public class Room {
             world[p.x()][p.y() + j] = Tileset.WALL;
             world[p.x() + w - 1][p.y() + j] = Tileset.WALL;
         }
-
-        Room r = new Room(p, w, h);
-        roomList.add(r);
-
-        roomMap.put(r.getStartX(), r);
     }
 
     private ArrayList<Position> roomSpace(Room r) {
@@ -99,24 +75,6 @@ public class Room {
         int ranX = random.nextInt(this.getWidth() - 2) + this.getPosition().x() + 1;
         int ranY = random.nextInt(this.getHeight() - 2) + this.getPosition().y() + 1;
         return new Position(ranX, ranY);
-    }
-
-    public static ArrayList<Room> sortedList(ArrayList<Room> roomList, HashMap<Integer, Room> roomMap) {
-        ArrayList<Room> newList = new ArrayList<>();
-        ArrayList<Integer> listX = new ArrayList<>();
-        for (Room r : roomList) {
-            listX.add(r.getStartX());
-        }
-        while (listX.size() != 0) {
-            int smallEst = minIndex(listX);
-            newList.add(roomMap.get(smallEst));
-            listX.remove(smallEst);
-        }
-        return newList;
-    }
-
-    private static int minIndex(ArrayList<Integer> listX) {
-        return listX.indexOf(Collections.min(listX));
     }
 
     public void fillAll(TETile[][] world, ArrayList<Room> roomList) {

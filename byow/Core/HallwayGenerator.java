@@ -28,7 +28,8 @@ public class HallwayGenerator {
      * Note 3: This will only work if method is called iteratively on sorted list, due
      * to start and end Positions.
      * */
-    public static void addHallwayPath(TETile[][] world, Room start, Room end, ArrayList<Hallway> hwList) {
+    public List<Hallway> addHallwayPath(TETile[][] world, Room start, Room end) {
+        List<Hallway> hwList = new LinkedList<>();
         //randomly selecting two positions in the two rooms respectively
         Position r1 = start.ranPosInRoom();
         Position r2 = end.ranPosInRoom();
@@ -58,6 +59,8 @@ public class HallwayGenerator {
         Hallway hallYToAdd = new Hallway(startV, endV, endV.y() - startV.y(), false);
         hallYToAdd.addHallway(world);
         hwList.add(hallYToAdd);
+
+        return hwList;
 
 
 //        /** Other Solution: "Please Bear With Mae." */

@@ -2,6 +2,8 @@ package byow.Core;
 
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class Engine {
     TERenderer ter = new TERenderer();
@@ -46,9 +48,49 @@ public class Engine {
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
 
+        TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
+        if (!(input.isEmpty())) {
 
+            ArrayList<Character> charArray = new ArrayList<>();
+            for (char ch : input.toCharArray()) {
+                charArray.add(ch);
+            }
 
-        TETile[][] finalWorldFrame = null;
+            if (charArray.get(0).equals('n') || charArray.get(0).equals('N') || Character.isDigit(charArray.get(1))) {
+                String numbersToParse = "";
+                int startIndexWASD;
+                for (int i = 1; i < charArray.size(); i++) {
+                    Character c = charArray.get(i);
+                    if (!Character.isDigit(c)) {
+                        startIndexWASD = i;
+                        if (!(c.equals('s') || c.equals('S'))) {
+                            return finalWorldFrame;
+                        }
+                        break;
+                    } else {
+                        numbersToParse += c;
+                    }
+                }
+                Integer seed = Integer.valueOf(numbersToParse);
+                WorldGenerator newWorld = new WorldGenerator(WIDTH, HEIGHT, seed);
+                Random random = new Random(seed);
+                newWorld.addRooms(random.nextInt() + 1);
+                newWorld.addHallways();
+                finalWorldFrame = newWorld.getTeTile();
+            }
+        }
+        ter.initialize(WIDTH, HEIGHT);
+        ter.renderFrame(finalWorldFrame);
         return finalWorldFrame;
     }
+
+//    /**
+//     * Helper to process strings into their "cleaned" form, ignoring punctuation and capitalization.
+//     * @Source: CS61B and Josh Hug
+//     * @param s Input string.
+//     * @return Cleaned string.
+//     */
+//    private static String cleanString(String s) {
+//        return s.replaceAll("[^a-zA-Z ]", "").toLowerCase();
+//    }
 }
