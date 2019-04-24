@@ -41,7 +41,7 @@ public class HallwayGenerator {
 
         //draw horizontal hallway first
         Position startH = r1; //the smaller x coordinate
-        Position endH = new Position(r2.x(), r2.y()); //the larger x coordinate
+        Position endH = new Position(r2.x(), r1.y()); //the larger x coordinate
         Hallway hallHToAdd = new Hallway(startH, endH, endH.x() - startH.x(), true);
         hallHToAdd.addHallway(world);
         this.hallwayList.add(hallHToAdd);
@@ -54,7 +54,7 @@ public class HallwayGenerator {
 
         //draw vertical
         Position startV = r1; //the smaller y coordinate
-        Position endV = new Position(endH.x(), endH.y() + 1); //the larger y coordinate
+        Position endV = new Position(startV.x(), endH.y() + 1); //the larger y coordinate
         Hallway hallVToAdd = new Hallway(startV, endV, endV.y() - startV.y(), false);
         hallVToAdd.addHallway(world);
         this.hallwayList.add(hallVToAdd);
