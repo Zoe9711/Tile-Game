@@ -57,7 +57,7 @@ public class HallwayGenerator {
         Hallway hallYToAdd = new Hallway(startV, endV, endV.y() - startV.y(), false);
         hallYToAdd.addHallway(world);
         hallwayList.add(hallYToAdd);
-        
+
 
 //        /** Other Solution: "Please Bear With Mae." */
 //        int roomOrientation = roomOrientation(start, end);
