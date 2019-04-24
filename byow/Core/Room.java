@@ -15,7 +15,7 @@ public class Room {
     private Position p; //bottom left corner of the room, wall
     private int width;  //including the wall
     private int height; //including the wall
-    private int maxSize; // height/width = 6
+    private int maxSize; // height/width = 8
 
 //    //Room (x,y) ranges, not including wall
     private int startX;
@@ -63,7 +63,7 @@ public class Room {
 //    }
 
 
-    public void addRoom(TETile[][] world, Position p, int w, int h, ArrayList<Room> roomList, HashMap<Integer, Room> roomMap) {
+    public static void addRoom(TETile[][] world, Position p, int w, int h, ArrayList<Room> roomList, HashMap<Integer, Room> roomMap) {
         for (int i = 0; i < w; i++ ) {
             world[p.x() + i][p.y()] = Tileset.WALL;
             world[p.x() + i][p.y() + h - 1] = Tileset.WALL;

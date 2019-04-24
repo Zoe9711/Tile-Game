@@ -4,18 +4,24 @@ import byow.TileEngine.TETile;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
+import byow.Core.Room;
 
 public class WorldGenerator {
     private int width;
     private int height;
     private int seed;
+    private TETile[][] world;
     private ArrayList<Room> roomList;
+    private HashMap<Integer, Room> roomMap;
 
     public WorldGenerator(int w, int h, int seed) {
+
         this.width = w;
         this.height = h;
         this.seed = seed;
+        this.world = new TETile[width][height];
     }
 
     public int width() {
@@ -26,34 +32,28 @@ public class WorldGenerator {
         return this.height;
     }
 
-    public int seed() {
+    private int seed() {
         return this.seed;
     }
 
-    public void addRoom(TETile[][] world, int NumOfRoom) {
+    public void addRoom(int NumOfRoom) {
         Random random = new Random(seed());
+        for (int i = 0; i < NumOfRoom; i++) {
+            int w = random.nextInt(8) + 1;
+            int h = random.nextInt(8) + 1;
+            int posX = random.nextInt(width() - w);
+            int posY = random.nextInt(height() - h);
+            Room.addRoom(this.world, new Position(posX, posY), w, h, this.roomList, this.roomMap);
+        }
 
     }
 
-    public void addHallWays(TETile[][] world, Room room1, Room room2) {
-
-        //randomly selecting two positions in the two rooms respectively
-        Position r1 = null;
-        Position r2 = null;
-
-        //draw horizontal hallway first?
-        Position startH = null; //the smaller x coordinate
-        Position endH = null; //the larger x coordinate
-        //hallway.addhorizontalhallway(world, start, end)
-
-        //draw vertical
-        Position startV = null; //the smaller y coordinate
-        Position endV = null; //the larger y coordinate
-        //hallway.addverticalhallway(world, start, end)
-
-        //add both to the list of hallways
-
+    public ArrayList<Room> roomList() {
+        return this.roomList;
     }
 
+    public TETile[][] getWorld() {
+        return this.world;
+    }
 
 }
