@@ -57,8 +57,7 @@ public class HallwayGenerator {
         Hallway hallYToAdd = new Hallway(startV, endV, endV.y() - startV.y(), false);
         hallYToAdd.addHallway(world);
         hallwayList.add(hallYToAdd);
-
-
+        
 
 //        /** Other Solution: "Please Bear With Mae." */
 //        int roomOrientation = roomOrientation(start, end);
@@ -76,7 +75,8 @@ public class HallwayGenerator {
 //        //Start room is on the right of End room
 //        Room right = start;
 //        Room left = end;
-//        if (end.getStartX() > start.getStartX()) { //Start room is actually on left; adjust for math.
+//        if (end.getStartX() > start.getStartX()) {
+//          //Start room is actually on left; adjust for math.
 //            right = end;
 //            left = start;
 //        }
@@ -93,7 +93,8 @@ public class HallwayGenerator {
 //        //Start room is above the End room
 //        Room above = start;
 //        Room below = end;
-//        if (end.getStartY() > start.getStartY()) { //Start room is actually below; adjust for math.
+//        if (end.getStartY() > start.getStartY()) {
+//              //Start room is actually below; adjust for math.
 //            above = end;
 //            below = start;
 //        }
@@ -109,7 +110,8 @@ public class HallwayGenerator {
 //    private void addDiagonalHallway(TETile[][] world, Room start, Room end) {
 //        Room right = start;
 //        Room left = end;
-//        if (end.getStartX() > start.getStartX()) { //Start room is actually on left; adjust for math.
+//        if (end.getStartX() > start.getStartX()) {
+//              Start room is actually on left; adjust for math.
 //            right = end;
 //            left = start;
 //        }
@@ -117,7 +119,8 @@ public class HallwayGenerator {
 //
 //        Room above = start;
 //        Room below = end;
-//        if (end.getStartY() > start.getStartY()) { //Start room is actually below; adjust for math.
+//        if (end.getStartY() > start.getStartY()) {
+//              //Start room is actually below; adjust for math.
 //            above = end;
 //            below = start;
 //        }
@@ -146,22 +149,23 @@ public class HallwayGenerator {
 //
 //    }
 //
-    /**
-     * Returns
-     *
-     * 0: rooms are horizontally aligned to each other.
-     * 1: rooms are vertically aligned to each other.
-     * -1: rooms are diagonal to each other. (Use starterRoom() to find horizontal, then vertical orientation.)
-     *
-     * Note: "a" should be "start", "b" should be "end" for consistency.
-     * */
-    private int roomOrientation(Room a, Room b) {
-        if (a.getEndY() >= b.getStartY() && a.getStartY() <= b.getEndY()) {
-            return 0;
-        } else if (a.getEndX() >= b.getStartX() && a.getStartX() <= b.getEndX()) {
-            return 1;
-        } else {
-            return -1;
-        }
-    }
+//    /**
+//     * Returns
+//     *
+//     * 0: rooms are horizontally aligned to each other.
+//     * 1: rooms are vertically aligned to each other.
+//     * -1: rooms are diagonal to each other.
+//     * For Diagonals: (Use starterRoom() to find horizontal, then vertical orientation.)
+//     *
+//     * Note: "a" should be "start", "b" should be "end" for consistency.
+//     * */
+//    private int roomOrientation(Room a, Room b) {
+//        if (a.getEndY() >= b.getStartY() && a.getStartY() <= b.getEndY()) {
+//            return 0;
+//        } else if (a.getEndX() >= b.getStartX() && a.getStartX() <= b.getEndX()) {
+//            return 1;
+//        } else {
+//            return -1;
+//        }
+//    }
 }
