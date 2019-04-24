@@ -30,22 +30,56 @@ public class HallwayGenerator {
         int roomOrientation = roomOrientation(start, end);
 
         if (roomOrientation == 0) { //horizontal rooms
-            if (start.getStartX() < end.getStartX()) { //start room is on the left
-
-            } else { //end room is on the left
-
-            }
-//            Hallway hallToAdd = new Hallway(startPos, endPos, length, true);
-//            hallwayList.add(hallToAdd);
+            addHorizontalHallway(world, start, end);
         } else if (roomOrientation == 1) { //vertical rooms
-
+            addVerticalHallway(world, start, end);
         } else { //diagonal rooms
-            if (starterRoom(start, end) == 0) { //start is above
-
-            } else { //end is above
-
-            }
+            Room sentinel = new Room(randomRangePos, );
+            addHorizontalHallway(world, start, sentinel);
+            addVerticalHallway(world, sentinel, end);
+            System.out.print("Life is sad.");
         }
+    }
+
+    private void addHorizontalHallway(TETile[][] world, Room start, Room end) {
+        //Start room is on the right of End room
+        Room right = start;
+        Room left = end;
+        if (end.getStartX() > start.getStartX()) { //Start room is actually on left; adjust for math.
+            right = end;
+            left = start;
+        }
+        int length = right.getStartX() - left.getEndX();
+        int randomYRange = getRandomFromRange(right, left);
+        Hallway hallToAdd = new Hallway(new Position(left.getEndX(), randomYRange),
+                new Position(right.getStartX(), randomYRange), length, true);
+        hallToAdd.addHallway(world);
+        hallwayList.add(hallToAdd);
+
+    }
+
+    private void addVerticalHallway(TETile[][] world, Room start, Room end) {
+        //Start room is above the End room
+        Room above = start;
+        Room below = end;
+        if (end.getStartY() > start.getStartY()) { //Start room is actually below; adjust for math.
+            above = end;
+            below = start;
+        }
+        int length = above.getStartY() - below.getEndY();
+        int randomXRange = getRandomFromRange(above, below);
+        Hallway hallToAdd = new Hallway(new Position(randomXRange, above.getStartY()),
+                new Position(randomXRange, below.getEndY()), length, false);
+        hallToAdd.addHallway(world);
+        hallwayList.add(hallToAdd);
+    }
+
+    /**
+     * Returns x or y of a pixel picked randomly from an x or y range.
+     * Assumes start is UP/RIGHT and end is DOWN/LEFT.
+     * */
+    private int getRandomFromRange(Room start, Room end) {
+
     }
 
     /**
@@ -65,23 +99,5 @@ public class HallwayGenerator {
         } else {
             return -1;
         }
-    }
-
-
-    /**
-     * Finds which room is the start room to make the "upside-down L shaped pathway";
-     * returns the higher room.
-     *
-     * Returns
-     *
-     * 0: a is the start, and on the left.
-     * 1: a is the start, and on the right.
-     * 2: b is the start, and on the left.
-     * 3: b is the start, and on the right.
-     *
-     * Note: "a" should be "start", "b" should be "end" for consistency.
-     * */
-    private int starterRoom(Room a, Room b) {
-
     }
 }
