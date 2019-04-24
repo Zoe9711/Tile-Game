@@ -62,7 +62,7 @@ public class WorldGenerator {
 
     public void addHallways() {
         //List<Room> newList = roomGenerator.sortedList(); //fix this - Null pointer Exception
-            ArrayList<Room> newList = roomGenerator.sortedList(roomGenerator.getRoomList(), roomGenerator.getMap()); //Alternate List for now.
+        ArrayList<Room> newList = roomGenerator.sortedList(); //Alternate List for now.
         for (int i = 0; i < newList.size() - 1; i++) {
             hallGenerator.addHallwayPath(this.world, newList.get(i), newList.get(i + 1));
         }

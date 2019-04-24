@@ -30,16 +30,16 @@ public class RoomGenerator {
         roomToAdd.addRoom(world, p, w, h);
     }
 
-    public static ArrayList<Room> sortedList(ArrayList<Room> roomList, HashMap<Integer, Room> roomMap) {
+    public ArrayList<Room> sortedList() {
         ArrayList<Room> newList = new ArrayList<>();
         ArrayList<Integer> listX = new ArrayList<>();
-        for (Room r : roomList) {
+        for (Room r : this.roomList) {
             listX.add(r.getStartX());
         }
         while (listX.size() != 0) {
             int smallEst = minIndex(listX);
             int smalleSt = listX.get(smallEst);
-            newList.add(roomMap.get(smalleSt));
+            newList.add(this.roomMap.get(smalleSt));
             listX.remove(smallEst);
         }
         return newList;
