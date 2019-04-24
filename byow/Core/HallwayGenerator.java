@@ -46,8 +46,6 @@ public class HallwayGenerator {
         hallHToAdd.addHallway(world);
         this.hallwayList.add(hallHToAdd);
 
-
-
         if (endH.y() > r2.y()) { //ensure r1 has smaller y coordinate
             Position rTemp = endH;
             endH = r2;

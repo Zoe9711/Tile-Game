@@ -77,11 +77,17 @@ public class Engine {
                         numbersToParse += c;
                     }
                 }
-                Integer seed = Integer.valueOf(numbersToParse);
+
+                String newString = numbersToParse;
+                if(numbersToParse.length() > 18) {
+                    newString = numbersToParse.substring(0, 9);
+                }
+                Integer seed = Integer.valueOf(newString);
+                System.out.println(seed);
                 WorldGenerator newWorld = new WorldGenerator(WIDTH, HEIGHT, seed);
                 Random random = new Random(seed);
                 //make up to 50 random rooms
-                newWorld.addRooms(RandomUtils.uniform(random, 50) + 1);
+                newWorld.addRooms(RandomUtils.uniform(random, 35) + 1);
                 newWorld.addHallways();
                 newWorld.cleanAndFill();
                 finalWorldFrame = newWorld.getTeTile();

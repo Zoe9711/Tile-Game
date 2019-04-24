@@ -11,8 +11,9 @@ public class Main {
             System.exit(0);
         } else if (args.length == 1) {
             Engine engine = new Engine();
-//            engine.interactWithInputString("N122134S");
-            engine.interactWithInputString(args[0]);
+            engine.interactWithInputString("n5197880843569031643s");
+//            engine.interactWithInputString("N1234S");
+            //engine.interactWithInputString(args[0]);
             System.out.println(engine.toString());
         } else {
             Engine engine = new Engine();
