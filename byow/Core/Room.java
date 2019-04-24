@@ -13,10 +13,21 @@ public class Room {
     private int height; //including the wall
     private int maxSize; // height/width = 6
 
+    //Room (x,y) ranges, not including wall
+    private int startX;
+    private int startY;
+    private int endX;
+    private int endY;
+
     public Room(Position p, int w, int h) {
         this.p = p;
         this.width = w;
         this.height = h;
+
+        this.startX = p.x() - 1;
+        this.endX = startX - width + 3;
+        this.startY = p.y() + 1;
+        this.endY = startY + height - 3;;
     }
 
     public Position getPosition() {
@@ -29,6 +40,22 @@ public class Room {
 
     public int getHeight() {
         return this.height;
+    }
+
+    public int getStartX() {
+        return this.startX;
+    }
+
+    public int getStartY() {
+        return this.startY;
+    }
+
+    public int getEndX() {
+        return this.endX;
+    }
+
+    public int getEndY() {
+        return this.endY;
     }
 
 

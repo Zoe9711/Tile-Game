@@ -20,15 +20,22 @@ public class HallwayGenerator {
     /**
      * Adds either ONE hallway for vertical/horizontal rooms, or TWO for diagonal rooms.
      *
-     * Note: A diagonal hallways must be identified as one single hallway instance, but
-     * consist of two hallways for the cleaning process.
+     * Note 1: Diagonal hallways consist of two hallways for the cleaning process.
+     * Note 2: Diagonal hallways will need to have an extra block added in the outer corner
+     * of the two joint hallways. May be ignored when cleaning.
+     * Note 3: This will only work if method is called iteratively on sorted list, due
+     * to start and end Positions.
      * */
     public void addHallwayPath(TETile[][] world, Room start, Room end) {
         int roomOrientation = roomOrientation(start, end);
 
         if (roomOrientation == 0) { //horizontal rooms
 
+            //Hallway hallToAdd = new Hallway(startPos, endPos, length, true);
+            //hallwayList.add(hallToAdd);
         } else if (roomOrientation == 1) { //vertical rooms
+            //Hallway hallToAdd = new Hallway(startPos, endPos, length, true);
+            //hallwayList.add(hallToAdd);
 
         } else { //diagonal rooms
             if (starterRoom(start, end) == 0) { //start is above
@@ -40,7 +47,8 @@ public class HallwayGenerator {
         }
     }
 
-    /** Returns
+    /**
+     * Returns
      *
      * 0: rooms are horizontally aligned to each other.
      * 1: rooms are vertically aligned to each other.
@@ -49,28 +57,17 @@ public class HallwayGenerator {
      * Note: "a" should be "start", "b" should be "end" for consistency.
      * */
     private int roomOrientation(Room a, Room b) {
-        //Room A ranges
-        int xARoomStartRange = a.getPosition().x();
-        int xARoomEndRange = xARoomStartRange + a.getHeight() - 1;
-        int yARoomStartRange = a.getPosition().y();
-        int yARoomEndRange = yARoomStartRange + a.getWidth() - 1;
-
-        //Room B ranges
-        int xBRoomStartRange = b.getPosition().x();
-        int xBRoomEndRange = xBRoomStartRange + b.getHeight() - 1;
-        int yBRoomStartRange = b.getPosition().y();
-        int yBRoomEndRange = yBRoomStartRange + b.getWidth() - 1;
-
-        if (yBRoomEndRange >= yARoomStartRange && yBRoomStartRange <= yARoomEndRange) {
+        if (a.getEndY() >= b.getStartY() && a.getStartY() <= b.getEndY()) {
             return 0;
-        } else if (xBRoomEndRange >= xARoomStartRange && xBRoomStartRange <= xARoomEndRange) {
+        } else if (a.getEndX() <= b.getStartX() && a.getStartX() >= b.getEndX()) {
             return 1;
         } else {
             return -1;
         }
     }
 
-    /** Finds which room is the start room to make the "upside-down L shaped pathway";
+    /**
+     * Finds which room is the start room to make the "upside-down L shaped pathway";
      * returns the higher room.
      *
      * Returns

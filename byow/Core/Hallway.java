@@ -8,9 +8,6 @@ public class Hallway {
     private int length; //does not include start and end points
     private boolean isHorizontal; //vertical or horizontal hallway
 
-    /**
-     * Adds either ONE hallway for vertical/horizontal rooms, or TWO for diagonal rooms.
-     * */
     public Hallway(Position s, Position e, int l, boolean h) {
         this.start = s;
         this.end = e;
