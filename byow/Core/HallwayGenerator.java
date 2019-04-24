@@ -34,10 +34,7 @@ public class HallwayGenerator {
         } else if (roomOrientation == 1) { //vertical rooms
             addVerticalHallway(world, start, end);
         } else { //diagonal rooms
-            Room sentinel = new Room(randomRangePos, );
-            addHorizontalHallway(world, start, sentinel);
-            addVerticalHallway(world, sentinel, end);
-            System.out.print("Life is sad.");
+
         }
     }
 
@@ -72,6 +69,10 @@ public class HallwayGenerator {
                 new Position(randomXRange, below.getEndY()), length, false);
         hallToAdd.addHallway(world);
         hallwayList.add(hallToAdd);
+    }
+
+    private void addDiagonalHallway(TETile[][] world, Room start, Room end, Position intersect) {
+
     }
 
     /**
