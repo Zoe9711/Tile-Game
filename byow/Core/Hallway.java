@@ -47,6 +47,18 @@ public class Hallway {
         }
     }
 
+    public void clean(TETile[][] world) {
+        if (isHorizontal) {
+            for (int i = start.x() + 1; i < end.x(); i++) {
+                world[i][start.y()] = Tileset.FLOOR;
+            }
+        } else {
+            for (int i = start.y() + 1; i < end.y(); i++) {
+                world[start.x()][i] = Tileset.FLOOR;
+            }
+        }
+    }
+
 }
 
     //Ignore for now.

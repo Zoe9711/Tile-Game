@@ -55,7 +55,7 @@ public class HallwayGenerator {
         }
 
         //draw vertical
-        Position startV = endH; //the smaller y coordinate
+        Position startV = new Position(endH.x(), endH.y() - 1); //the smaller y coordinate
         Position endV = new Position(startV.x(), r2.y() + 1); //the larger y coordinate
         Hallway hallVToAdd = new Hallway(startV, endV, endV.y() - startV.y(), false);
         hallVToAdd.addHallway(world);
@@ -64,6 +64,7 @@ public class HallwayGenerator {
 
     public void fillAll(TETile[][] world) {
         for (Hallway h : this.hallwayList) {
+            h.clean(world);
             //NOTE: do stuff here with this.world, make sure about the orientations!
         }
     }
