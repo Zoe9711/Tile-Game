@@ -30,7 +30,7 @@ public class RoomGenerator {
         roomToAdd.addRoom(world, p, w, h);
     }
 
-    public static List<Room> sortedList(ArrayList<Room> roomList, HashMap<Integer, Room> roomMap) {
+    public static ArrayList<Room> sortedList(ArrayList<Room> roomList, HashMap<Integer, Room> roomMap) {
         ArrayList<Room> newList = new ArrayList<>();
         ArrayList<Integer> listX = new ArrayList<>();
         for (Room r : roomList) {
