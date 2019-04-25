@@ -3,7 +3,10 @@ package byow.Core;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 public class RoomGenerator {
     private ArrayList<Room> roomList; //list of hallways for cleaning
@@ -27,7 +30,7 @@ public class RoomGenerator {
         Room roomToAdd = new Room(p, w, h);
         this.roomMap.put(roomToAdd.getStartX(), roomToAdd);
         this.roomList.add(roomToAdd);
-        roomToAdd.addRoom(world, p, w, h);
+        roomToAdd.addRoom(world, w, h);
     }
 
     public ArrayList<Room> sortedList() {

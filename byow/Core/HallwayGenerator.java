@@ -2,7 +2,9 @@ package byow.Core;
 
 import byow.TileEngine.TETile;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 public class HallwayGenerator {
     private List<Hallway> hallwayList; //list of hallways for cleaning

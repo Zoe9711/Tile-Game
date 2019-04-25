@@ -3,11 +3,7 @@ package byow.Core;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
-
-import java.util.ArrayList;
 import java.util.Random;
-
-
 
 public class Room {
     private Position p; //bottom left corner of the room, wall
@@ -48,8 +44,8 @@ public class Room {
         return this.startX;
     }
 
-    public void addRoom(TETile[][] world, Position p, int w, int h) {
-        for (int i = 0; i < w; i++ ) {
+    public void addRoom(TETile[][] world, int w, int h) {
+        for (int i = 0; i < w; i++) {
             world[p.x() + i][p.y()] = Tileset.WALL;
             world[p.x() + i][p.y() + h - 1] = Tileset.WALL;
         }

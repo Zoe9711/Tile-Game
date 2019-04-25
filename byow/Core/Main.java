@@ -12,9 +12,11 @@ public class Main {
 //            System.out.print("Case1");
         } else if (args.length == 1) {
             Engine engine = new Engine();
-            engine.interactWithInputString("n5197880843569031643s");
-//            engine.interactWithInputString("N1234S");
-            //engine.interactWithInputString(args[0]);
+            // doesn't work if sorted: DEBUG SEEDS
+            //engine.interactWithInputString("n5197880843569031643s");
+            //engine.interactWithInputString("n455857754086099036s");
+            //engine.interactWithInputString("N1234S");
+            engine.interactWithInputString(args[0]);
             System.out.println(engine.toString());
         } else {
             Engine engine = new Engine();
