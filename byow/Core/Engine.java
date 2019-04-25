@@ -49,7 +49,7 @@ public class Engine {
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
 
-        ter.initialize(WIDTH, HEIGHT);
+        //ter.initialize(WIDTH, HEIGHT);
         TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {
@@ -83,7 +83,7 @@ public class Engine {
                     newString = numbersToParse.substring(0, 9);
                 }
                 Integer seed = Integer.valueOf(newString);
-                System.out.println(seed);
+                //System.out.println(seed);
                 WorldGenerator newWorld = new WorldGenerator(WIDTH, HEIGHT, seed);
                 Random random = new Random(seed);
                 //make up to 50 random rooms
@@ -93,7 +93,7 @@ public class Engine {
                 finalWorldFrame = newWorld.getTeTile();
             }
         }
-        ter.renderFrame(finalWorldFrame);
+        //ter.renderFrame(finalWorldFrame);
         return finalWorldFrame;
     }
 

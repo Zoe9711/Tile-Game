@@ -9,6 +9,7 @@ public class Main {
         if (args.length > 1) {
             System.out.println("Can only have one argument - the input string");
             System.exit(0);
+//            System.out.print("Case1");
         } else if (args.length == 1) {
             Engine engine = new Engine();
             engine.interactWithInputString("n5197880843569031643s");
@@ -18,6 +19,8 @@ public class Main {
         } else {
             Engine engine = new Engine();
             engine.interactWithKeyboard();
+//            System.out.print("Case 3");
         }
+//        System.out.print("pls work");
     }
 }
