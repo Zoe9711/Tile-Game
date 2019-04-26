@@ -2,8 +2,12 @@ package byow.Core;
 
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
+import edu.princeton.cs.algs4.Queue;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
 
 public class RoomGenerator {
     private ArrayList<Room> roomList; //list of hallways for cleaning
@@ -23,24 +27,42 @@ public class RoomGenerator {
         return this.roomList;
     }
 
-    public void addRoom(TETile[][] world, Position p, int w, int h) {
-        Room roomToAdd = new Room(p, w, h);
-        this.roomMap.put(roomToAdd.getStartX(), roomToAdd);
+    public void addRoom(TETile[][] world, Position p, int w, int h, int id) {
+        Room roomToAdd = new Room(p, w, h, id);
+        this.roomMap.put(roomToAdd.getStartX() + roomToAdd.getStartY(), roomToAdd);
         this.roomList.add(roomToAdd);
-        roomToAdd.addRoom(world, p, w, h);
+        roomToAdd.addRoom(world, w, h);
     }
 
-    public  ArrayList<Room> sortedList() {
-        ArrayList<Room> newList = new ArrayList<>();
-        ArrayList<Integer> listX = new ArrayList<>();
-        for (Room r : this.roomList) {
-            listX.add(r.getStartX());
+    public ArrayList<Room> sortedList() {
+//        ArrayList<Room> newList = new ArrayList<>();
+//        ArrayList<Integer> listX = new ArrayList<>();
+//        for (Room r : this.roomList) {
+//            listX.add(r.getStartX() + r.getStartY());
+//        }
+//        while (listX.size() != 0) {
+//            int smallEst = minIndex(listX);
+//            int smalleSt = listX.get(smallEst);
+//            newList.add(this.roomMap.get(smalleSt));
+//            System.out.println(this.roomMap.get(smalleSt).getId());
+//            listX.remove(smallEst);
+//        }
+//        return newList;
+        Queue<Room> items = new Queue<>();
+
+        for (Room i: this.getRoomList()) {
+            items.enqueue(i);
         }
-        while (listX.size() != 0) {
-            int smallEst = minIndex(listX);
-            int smalleSt = listX.get(smallEst);
-            newList.add(this.roomMap.get(smalleSt));
-            listX.remove(smallEst);
+
+        items = QuickSort.quickSort(items);
+
+        ArrayList<Room> newList = new ArrayList<>();
+        while (!items.isEmpty()) {
+            newList.add(items.dequeue());
+        }
+        System.out.println(newList.size());
+        for (Room i: newList) {
+            System.out.println(i.getId());
         }
         return newList;
     }

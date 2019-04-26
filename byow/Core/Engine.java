@@ -62,7 +62,8 @@ public class Engine {
                 charArray.add(ch);
             }
 
-            if (charArray.get(0).equals('n') || charArray.get(0).equals('N') || Character.isDigit(charArray.get(1))) {
+            if (charArray.get(0).equals('n') || charArray.get(0).equals('N')
+                    || Character.isDigit(charArray.get(1))) {
                 String numbersToParse = "";
                 int startIndexWASD;
                 for (int i = 1; i < charArray.size(); i++) {
@@ -77,11 +78,23 @@ public class Engine {
                         numbersToParse += c;
                     }
                 }
-                Integer seed = Integer.valueOf(numbersToParse);
+
+                //System.out.println(numbersToParse);
+                if (numbersToParse.length() > 19) {
+                    return finalWorldFrame;
+                }
+
+                long seed = Long.valueOf(numbersToParse);
+//                for (int i = numbersToParse.length() - 1; i >= 0; i--) {
+//                    String c = Character.toString(numbersToParse.charAt(i));
+//                    seed += Integer.parseInt(c) * (int) Math.pow(10, i);
+//                }
+
+                //System.out.println(seed);
                 WorldGenerator newWorld = new WorldGenerator(WIDTH, HEIGHT, seed);
                 Random random = new Random(seed);
-                //make up to 50 random rooms
-                newWorld.addRooms(RandomUtils.uniform(random, 50) + 1);
+                //make up to 35 random rooms
+                newWorld.addRooms(RandomUtils.uniform(random, 35) + 1);
                 newWorld.addHallways();
                 newWorld.cleanAndFill();
                 finalWorldFrame = newWorld.getTeTile();
@@ -90,14 +103,4 @@ public class Engine {
         ter.renderFrame(finalWorldFrame);
         return finalWorldFrame;
     }
-
-//    /**
-//     * Helper to process strings into their "cleaned" form, ignoring punctuation and capitalization.
-//     * @Source: CS61B and Josh Hug
-//     * @param s Input string.
-//     * @return Cleaned string.
-//     */
-//    private static String cleanString(String s) {
-//        return s.replaceAll("[^a-zA-Z ]", "").toLowerCase();
-//    }
 }

@@ -2,15 +2,17 @@ package byow.Core;
 
 import byow.TileEngine.TETile;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class HallwayGenerator {
     private List<Hallway> hallwayList; //list of hallways for cleaning
+    private Random randomGenerator;
 
-    public HallwayGenerator() {
+    public HallwayGenerator(Random rand) {
         this.hallwayList = new LinkedList<>();
+        this.randomGenerator = rand;
     }
 
 
@@ -30,8 +32,8 @@ public class HallwayGenerator {
      * */
     public void addHallwayPath(TETile[][] world, Room start, Room end) {
         //randomly selecting two positions in the two rooms respectively
-        Position r1 = start.ranPosInRoom();
-        Position r2 = end.ranPosInRoom();
+        Position r1 = start.ranPosInRoom(randomGenerator);
+        Position r2 = end.ranPosInRoom(randomGenerator);
 
         if (r1.x() > r2.x()) { //ensure r1 has smaller x coordinate
             Position rTemp = r1;
@@ -45,8 +47,6 @@ public class HallwayGenerator {
         Hallway hallHToAdd = new Hallway(startH, endH, endH.x() - startH.x(), true);
         hallHToAdd.addHallway(world);
         this.hallwayList.add(hallHToAdd);
-
-
 
         if (endH.y() > r2.y()) { //ensure r1 has smaller y coordinate
             Position rTemp = endH;
