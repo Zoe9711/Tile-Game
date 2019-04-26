@@ -30,7 +30,7 @@ public class RoomGenerator {
         roomToAdd.addRoom(world, p, w, h);
     }
 
-    public ArrayList<Room> sortedList() {
+    public  ArrayList<Room> sortedList() {
         ArrayList<Room> newList = new ArrayList<>();
         ArrayList<Integer> listX = new ArrayList<>();
         for (Room r : this.roomList) {
@@ -70,7 +70,7 @@ public class RoomGenerator {
     public static void main(String[] args) {
         Position p1 = new Position(9, 9);
         Room r1 = new Room(p1, 2, 2);
-        Position p2 = new Position(5, 3);
+        Position p2 = new Position(3, 3);
         Room r2 = new Room(p2, 2, 2);
         Position p3 = new Position(3, 5);
         Room r3 = new Room(p3, 2, 2);
@@ -80,7 +80,7 @@ public class RoomGenerator {
         roomList.add(r3);
         HashMap<Integer, Room> roomMap = new HashMap<>();
         roomMap.put(9, r1);
-        roomMap.put(5, r2);
+        roomMap.put(3, r2);
         roomMap.put(3, r3);
         List<Room> newList = sortedList(roomList, roomMap);
         System.out.println(newList);
