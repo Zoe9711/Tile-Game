@@ -3,21 +3,26 @@ package byow.Core;
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
+import edu.princeton.cs.algs4.StdDraw;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Engine {
     TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
-    public static final int WIDTH = 80;
-    public static final int HEIGHT = 30;
-
+    private static final int WIDTH = 80;
+    private static final int HEIGHT = 30;
+    private static final int MWIDTH = 60;
+    private static final int MHEIGHT = 40;
     /**
      * Method used for exploring a fresh world. This method should handle all inputs,
      * including inputs from the main menu.
      */
     public void interactWithKeyboard() {
+        drawMenu();
+
     }
 
     /**
@@ -103,4 +108,45 @@ public class Engine {
         ter.renderFrame(finalWorldFrame);
         return finalWorldFrame;
     }
+
+    private void drawMenu() {
+        Font title = new Font("Times New Roman", Font.BOLD, 20);
+        StdDraw.setFont(title);
+        StdDraw.setPenColor(Color.white);
+        StdDraw.text(MWIDTH / 2, MHEIGHT * 2 / 3, "My World");
+        Font other = new Font("Times New Roman", Font.PLAIN, 12);
+        StdDraw.setFont(other);
+        StdDraw.text(MWIDTH / 2, MHEIGHT / 2, "New Game (N)");
+        StdDraw.text(MWIDTH / 2, MHEIGHT * 2 / 5, "Load Game (L)");
+        StdDraw.text(MWIDTH / 2, MHEIGHT * 3 / 10, "Quit (Q)");
+        StdDraw.show();
+    }
+
+    private void mouse(WorldGenerator wg) {
+        TETile mPos = wg.getTeTile()[(int) StdDraw.mouseX()][(int) StdDraw.mouseY()];
+        if (mPos.equals(Tileset.AVATAR)) {
+            ter.renderFrame(wg.getTeTile());
+            StdDraw.enableDoubleBuffering();
+            StdDraw.setPenColor(Color.white);
+            StdDraw.text(WIDTH / 2, HEIGHT, "You");
+        } else if (mPos.equals(Tileset.WALL)) {
+            ter.renderFrame(wg.getTeTile());
+            StdDraw.enableDoubleBuffering();
+            StdDraw.setPenColor(Color.white);
+            StdDraw.text(WIDTH / 2, HEIGHT, "Wall");
+        }
+        else if (mPos.equals(Tileset.FLOOR)) {
+            ter.renderFrame(wg.getTeTile());
+            StdDraw.enableDoubleBuffering();
+            StdDraw.setPenColor(Color.white);
+            StdDraw.text(WIDTH / 2, HEIGHT, "Floor");
+        } else {
+            ter.renderFrame(wg.getTeTile());
+            StdDraw.enableDoubleBuffering();
+            StdDraw.setPenColor(Color.white);
+            StdDraw.text(WIDTH / 2, HEIGHT, "Nothing");
+        }
+        StdDraw.show();
+    }
+
 }
