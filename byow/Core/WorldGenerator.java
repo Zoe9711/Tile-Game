@@ -14,6 +14,7 @@ public class WorldGenerator {
     private int height;
     private long seed;
     private TETile[][] world;
+    private Position player;
     private ArrayList<Room> roomList;
     private HashMap<Integer, Room> roomMap;
     private List<Hallway> hallwayList;
@@ -38,6 +39,10 @@ public class WorldGenerator {
 
     public TETile[][] getTeTile() {
         return this.world;
+    }
+
+    public Position getPlayer() {
+        return this.player;
     }
 
     public int width() {
@@ -77,6 +82,18 @@ public class WorldGenerator {
             hallGenerator.addHallwayPath(this.world, newList.get(i), newList.get(i + 1));
         }
         this.hallwayList = hallGenerator.getHallwayList();
+    }
+
+    public void addPlayer() {
+        Random random = new Random(seed());
+        Room ranRm = roomList.get(random.nextInt(roomList.size()));
+        Position player = ranRm.ranPosInRoom(random);
+        world[player.x()][player.y()] = Tileset.AVATAR;
+        this.player = new Position(player.x(), player.y());
+    }
+
+    public void modPlayer(Position p) {
+        this.player = new Position(p.x(), p.y());
     }
 
     public void cleanAndFill() {

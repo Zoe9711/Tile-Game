@@ -102,11 +102,53 @@ public class Engine {
                 newWorld.addRooms(RandomUtils.uniform(random, 35) + 1);
                 newWorld.addHallways();
                 newWorld.cleanAndFill();
+                newWorld.addPlayer();
                 finalWorldFrame = newWorld.getTeTile();
             }
         }
         ter.renderFrame(finalWorldFrame);
         return finalWorldFrame;
+    }
+
+    private void WASD(WorldGenerator wg, char key) {
+        TETile up = wg.getTeTile()[wg.getPlayer().x()][wg.getPlayer().y() + 1];
+        TETile down = wg.getTeTile()[wg.getPlayer().x()][wg.getPlayer().y() - 1];
+        TETile left = wg.getTeTile()[wg.getPlayer().x() - 1][wg.getPlayer().y()];
+        TETile right = wg.getTeTile()[wg.getPlayer().x() + 1][wg.getPlayer().y()];
+        switch (key) {
+            case ('w'): {
+                if (up.equals(Tileset.FLOOR)) {
+                    wg.getTeTile()[wg.getPlayer().x()][wg.getPlayer().y() + 1] = Tileset.AVATAR;
+                    wg.getTeTile()[wg.getPlayer().x()][wg.getPlayer().y()] = Tileset.FLOOR;
+                }
+                wg.modPlayer(new Position(wg.getPlayer().x(), wg.getPlayer().y() + 1));
+            }
+
+            case ('s'): {
+                if (down.equals(Tileset.FLOOR)) {
+                    wg.getTeTile()[wg.getPlayer().x()][wg.getPlayer().y() - 1] = Tileset.AVATAR;
+                    wg.getTeTile()[wg.getPlayer().x()][wg.getPlayer().y()] = Tileset.FLOOR;
+                }
+                wg.modPlayer(new Position(wg.getPlayer().x(), wg.getPlayer().y() - 1));
+
+            }
+
+            case ('a'): {
+                if (left.equals(Tileset.FLOOR)) {
+                    wg.getTeTile()[wg.getPlayer().x() - 1][wg.getPlayer().y()] = Tileset.AVATAR;
+                    wg.getTeTile()[wg.getPlayer().x()][wg.getPlayer().y()] = Tileset.FLOOR;
+                }
+                wg.modPlayer(new Position(wg.getPlayer().x() - 1, wg.getPlayer().y()));
+            }
+
+            case ('d'): {
+                if (right.equals(Tileset.FLOOR)) {
+                    wg.getTeTile()[wg.getPlayer().x() + 1][wg.getPlayer().y()] = Tileset.AVATAR;
+                    wg.getTeTile()[wg.getPlayer().x()][wg.getPlayer().y()] = Tileset.FLOOR;
+                }
+                wg.modPlayer(new Position(wg.getPlayer().x() + 1, wg.getPlayer().y()));
+            }
+        }
     }
 
     private void drawMenu() {
