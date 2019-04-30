@@ -35,7 +35,7 @@ public class Engine {
         drawCanvas();
         drawMenu();
 
-        while (!(last.equals('q'))) {
+        while (!last.equals('q')) {
             if (!StdDraw.hasNextKeyTyped()) { //runs below if key is pressed.
                 last = StdDraw.nextKeyTyped();
 
