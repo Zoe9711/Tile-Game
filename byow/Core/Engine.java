@@ -58,6 +58,7 @@ public class Engine {
                             System.out.print("case n");
                             savedWorld = "";
                             savedWorld += last.toString();
+                            seedMenu("");
                             seedInputRunning = true;
                             menuRunning = false;
                             break;
@@ -79,7 +80,7 @@ public class Engine {
                     ter.renderFrame(newWorld.getTeTile());
                 } else if (seedInputRunning) {
                     if (last.equals('s') || last.equals('S')) {
-                        savedWorld += last;
+                        savedWorld += last.toString();
                         ter.initialize(WIDTH, HEIGHT);
                         this.renderTiles = interactWithInputString(savedWorld);
                         ter.renderFrame(renderTiles);
@@ -87,23 +88,17 @@ public class Engine {
                         gameRunning = true;
                     }
                     if (Character.isDigit(last)) {
-                        savedWorld += last;
+                        savedWorld += last.toString();
+                        seed += last.toString();
+                        seedMenu(seed);
                     }
                 } else {
                     //does nothing :/
                 }
 
                 last = new Character(' ');
-
-
-
-
             }
-
         }
-
-
-
     }
 
     /**
@@ -204,6 +199,7 @@ public class Engine {
                 }
                 wg.modPlayer(new Position(wg.getPlayer().x(), wg.getPlayer().y() + 1));
                 savedWorld += key;
+                break;
             }
 
             case ('s'): {
@@ -213,6 +209,7 @@ public class Engine {
                 }
                 wg.modPlayer(new Position(wg.getPlayer().x(), wg.getPlayer().y() - 1));
                 savedWorld += key;
+                break;
             }
 
             case ('a'): {
@@ -222,6 +219,7 @@ public class Engine {
                 }
                 wg.modPlayer(new Position(wg.getPlayer().x() - 1, wg.getPlayer().y()));
                 savedWorld += key;
+                break;
             }
 
             case ('d'): {
@@ -231,6 +229,7 @@ public class Engine {
                 }
                 wg.modPlayer(new Position(wg.getPlayer().x() + 1, wg.getPlayer().y()));
                 savedWorld += key;
+                break;
             }
         }
     }
