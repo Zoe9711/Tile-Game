@@ -76,7 +76,7 @@ public class Engine {
                         }
                     }
                 } else if (gameRunning) {
-                    WASD(newWorld, last);
+                    WASD(last);
                     ter.renderFrame(newWorld.getTeTile());
                 } else if (seedInputRunning) {
                     if (last.equals('s') || last.equals('S')) {
@@ -178,7 +178,7 @@ public class Engine {
                 newWorld.addRooms(RandomUtils.uniform(random, 35) + 1);
                 newWorld.addHallways();
                 newWorld.cleanAndFill();
-                newWorld.addPlayer();
+                newWorld.addPlayers();
                 finalWorldFrame = newWorld.getTeTile();
             }
         }
@@ -186,49 +186,43 @@ public class Engine {
         return finalWorldFrame;
     }
 
-    private void WASD(WorldGenerator wg, char key) {
-        TETile up = wg.getTeTile()[wg.getPlayer().x()][wg.getPlayer().y() + 1];
-        TETile down = wg.getTeTile()[wg.getPlayer().x()][wg.getPlayer().y() - 1];
-        TETile left = wg.getTeTile()[wg.getPlayer().x() - 1][wg.getPlayer().y()];
-        TETile right = wg.getTeTile()[wg.getPlayer().x() + 1][wg.getPlayer().y()];
+    private void WASD(Character key) {
+        TETile up = newWorld.getTeTile()[newWorld.getPlayer().x()][newWorld.getPlayer().y() + 1];
+        TETile down = newWorld.getTeTile()[newWorld.getPlayer().x()][newWorld.getPlayer().y() - 1];
+        TETile left = newWorld.getTeTile()[newWorld.getPlayer().x() - 1][newWorld.getPlayer().y()];
+        TETile right = newWorld.getTeTile()[newWorld.getPlayer().x() + 1][newWorld.getPlayer().y()];
         switch (key) {
+            case ('W'):
             case ('w'): {
                 if (up.equals(Tileset.FLOOR)) {
-                    wg.getTeTile()[wg.getPlayer().x()][wg.getPlayer().y() + 1] = Tileset.AVATAR;
-                    wg.getTeTile()[wg.getPlayer().x()][wg.getPlayer().y()] = Tileset.FLOOR;
+                    newWorld.moveUp();
                 }
-                wg.modPlayer(new Position(wg.getPlayer().x(), wg.getPlayer().y() + 1));
-                savedWorld += key;
+                savedWorld += key.toString();
                 break;
             }
-
+            case ('S'):
             case ('s'): {
                 if (down.equals(Tileset.FLOOR)) {
-                    wg.getTeTile()[wg.getPlayer().x()][wg.getPlayer().y() - 1] = Tileset.AVATAR;
-                    wg.getTeTile()[wg.getPlayer().x()][wg.getPlayer().y()] = Tileset.FLOOR;
+                    newWorld.moveDown();
                 }
-                wg.modPlayer(new Position(wg.getPlayer().x(), wg.getPlayer().y() - 1));
-                savedWorld += key;
+                savedWorld += key.toString();
                 break;
             }
-
+            case ('A'):
             case ('a'): {
                 if (left.equals(Tileset.FLOOR)) {
-                    wg.getTeTile()[wg.getPlayer().x() - 1][wg.getPlayer().y()] = Tileset.AVATAR;
-                    wg.getTeTile()[wg.getPlayer().x()][wg.getPlayer().y()] = Tileset.FLOOR;
+                    newWorld.moveLeft();
                 }
-                wg.modPlayer(new Position(wg.getPlayer().x() - 1, wg.getPlayer().y()));
-                savedWorld += key;
+                savedWorld += key.toString();
                 break;
             }
-
+            case ('D'):
             case ('d'): {
                 if (right.equals(Tileset.FLOOR)) {
-                    wg.getTeTile()[wg.getPlayer().x() + 1][wg.getPlayer().y()] = Tileset.AVATAR;
-                    wg.getTeTile()[wg.getPlayer().x()][wg.getPlayer().y()] = Tileset.FLOOR;
+                    newWorld.moveRight();
+
                 }
-                wg.modPlayer(new Position(wg.getPlayer().x() + 1, wg.getPlayer().y()));
-                savedWorld += key;
+                savedWorld += key.toString();
                 break;
             }
         }

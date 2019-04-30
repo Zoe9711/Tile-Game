@@ -14,12 +14,12 @@ public class WorldGenerator {
     private int height;
     private long seed;
     private TETile[][] world;
-    private Position player;
     private ArrayList<Room> roomList;
     private HashMap<Integer, Room> roomMap;
     private List<Hallway> hallwayList;
     private RoomGenerator roomGenerator = new RoomGenerator();
     private HallwayGenerator hallGenerator;
+    private Player player;
 
     public WorldGenerator(int w, int h, long seed) {
         this.width = w;
@@ -28,6 +28,8 @@ public class WorldGenerator {
         this.roomMap = new HashMap<>();
         this.hallwayList = new LinkedList<>();
         this.hallGenerator = new HallwayGenerator(new Random(seed));
+        this.player = new Player(new Position(0, 0));
+
 
         this.world = new TETile[width][height];
         for (int x = 0; x < width; x += 1) {
@@ -42,7 +44,7 @@ public class WorldGenerator {
     }
 
     public Position getPlayer() {
-        return this.player;
+        return this.player.getPosition();
     }
 
     public int width() {
@@ -84,16 +86,39 @@ public class WorldGenerator {
         this.hallwayList = hallGenerator.getHallwayList();
     }
 
-    public void addPlayer() {
+    public void addPlayers() {
         Random random = new Random(seed());
         Room ranRm = roomList.get(random.nextInt(roomList.size()));
-        Position player = ranRm.ranPosInRoom(random);
-        world[player.x()][player.y()] = Tileset.AVATAR;
-        this.player = new Position(player.x(), player.y());
+        Position playerP = ranRm.ranPosInRoom(random);
+        player.addPlayer(this.world, playerP);
+        this.player = new Player(playerP);
     }
 
-    public void modPlayer(Position p) {
-        this.player = new Position(p.x(), p.y());
+    public void moveUp() {
+        Position n = new Position(getPlayer().x(), getPlayer().y() + 1);
+        player.move(this.world, getPlayer(), n);
+        this.player = new Player(n);
+
+    }
+
+    public void moveDown() {
+        Position n = new Position(getPlayer().x(), getPlayer().y() - 1);
+        player.move(this.world, getPlayer(), n);
+        this.player = new Player(n);
+    }
+
+    public void moveRight() {
+        Position n = new Position(getPlayer().x() + 1, getPlayer().y());
+        player.move(this.world, getPlayer(), n);
+        this.player = new Player(n);
+
+    }
+
+    public void moveLeft() {
+        Position n = new Position(getPlayer().x() - 1, getPlayer().y());
+        player.move(this.world, getPlayer(), n);
+        this.player = new Player(n);
+
     }
 
     public void cleanAndFill() {
