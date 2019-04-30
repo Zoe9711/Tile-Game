@@ -6,6 +6,7 @@ import byow.TileEngine.Tileset;
 import edu.princeton.cs.algs4.StdDraw;
 
 import java.awt.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -168,6 +169,12 @@ public class Engine {
         StdDraw.show();
     }
 
+    private void seedMenu(String seed) {
+        StdDraw.clear(Color.BLACK);
+        StdDraw.text(MWIDTH / 2, MHEIGHT / 2, "Input: " + seed);
+        StdDraw.show();
+    }
+
     private void drawCanvas() {
         StdDraw.setCanvasSize(MWIDTH * 16, MHEIGHT * 16);
         Font font = new Font("Times New Roman", Font.BOLD, 100);
@@ -204,5 +211,19 @@ public class Engine {
         }
         StdDraw.show();
     }
+
+    private void save(WorldGenerator wg) {
+        File file = new File("savedWorld.txt");
+        try {
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(file));
+            outputStream.writeObject(wg);
+        } catch (IOException e) {
+          System.out.println(e);
+        }
+    }
+
 
 }
