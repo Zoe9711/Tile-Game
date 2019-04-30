@@ -16,14 +16,72 @@ public class Engine {
     private static final int HEIGHT = 30;
     private static final int MWIDTH = 60;
     private static final int MHEIGHT = 40;
-    private WorldGenerator savedWorld;
+    private String savedWorld = "";
+    private boolean gameRunning = false;
+    private boolean seedInputRunning = false;
+    private boolean menuRunning = true;
+    private WorldGenerator currWorld;
+    TETile[][] renderTiles = null;
+
     /**
      * Method used for exploring a fresh world. This method should handle all inputs,
      * including inputs from the main menu.
      */
     public void interactWithKeyboard() {
+        Character last = new Character(' ');
+        String seed = "";
+
         drawCanvas();
         drawMenu();
+
+        while (!(last.equals('q'))) {
+            if (!StdDraw.hasNextKeyTyped()) { //runs below if key is pressed.
+                last = StdDraw.nextKeyTyped();
+
+                if (menuRunning) {
+                    switch(last) {
+                        case ('N'):
+                        case ('n'): {
+                            savedWorld = "";
+                            savedWorld += last;
+                            seedInputRunning = true;
+                            menuRunning = false;
+                        }
+                        case ('L'):
+                        case ('l'): {
+                            renderTiles = interactWithInputString(savedWorld);
+                            savedWorld += last;
+                        }
+                        case ('Q'):
+                        case ('q'): {
+                            System.exit(0);
+                        }
+                    }
+                }
+
+                if (gameRunning) {
+                    WASD(currWorld, last);
+                    ter.renderFrame(currWorld.getTeTile());
+                }
+
+                if (seedInputRunning) {
+                    if (last.equals('s') || last.equals('S')) {
+                        renderTiles = interactWithInputString(savedWorld);
+
+                    } else {
+                        savedWorld += last;
+                    }
+                }
+
+                last = new Character(' ');
+
+
+
+
+            }
+
+        }
+
 
 
     }
@@ -57,7 +115,7 @@ public class Engine {
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
 
-        ter.initialize(WIDTH, HEIGHT);
+//        ter.initialize(WIDTH, HEIGHT);
         TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {
@@ -109,7 +167,7 @@ public class Engine {
                 finalWorldFrame = newWorld.getTeTile();
             }
         }
-        ter.renderFrame(finalWorldFrame);
+//        ter.renderFrame(finalWorldFrame);
         return finalWorldFrame;
     }
 
@@ -125,6 +183,7 @@ public class Engine {
                     wg.getTeTile()[wg.getPlayer().x()][wg.getPlayer().y()] = Tileset.FLOOR;
                 }
                 wg.modPlayer(new Position(wg.getPlayer().x(), wg.getPlayer().y() + 1));
+                savedWorld += key;
             }
 
             case ('s'): {
@@ -133,7 +192,7 @@ public class Engine {
                     wg.getTeTile()[wg.getPlayer().x()][wg.getPlayer().y()] = Tileset.FLOOR;
                 }
                 wg.modPlayer(new Position(wg.getPlayer().x(), wg.getPlayer().y() - 1));
-
+                savedWorld += key;
             }
 
             case ('a'): {
@@ -142,6 +201,7 @@ public class Engine {
                     wg.getTeTile()[wg.getPlayer().x()][wg.getPlayer().y()] = Tileset.FLOOR;
                 }
                 wg.modPlayer(new Position(wg.getPlayer().x() - 1, wg.getPlayer().y()));
+                savedWorld += key;
             }
 
             case ('d'): {
@@ -150,12 +210,13 @@ public class Engine {
                     wg.getTeTile()[wg.getPlayer().x()][wg.getPlayer().y()] = Tileset.FLOOR;
                 }
                 wg.modPlayer(new Position(wg.getPlayer().x() + 1, wg.getPlayer().y()));
+                savedWorld += key;
             }
         }
     }
 
     private void drawMenu() {
-        
+
         Font title = new Font("Times New Roman", Font.BOLD, 40);
         StdDraw.setFont(title);
         StdDraw.setPenColor(Color.white);
