@@ -3,7 +3,7 @@ package byow.Core;
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
-import edu.princeton.cs.algs4.StdDraw;
+import edu.princeton.cs.introcs.StdDraw;
 
 import java.awt.*;
 import java.io.*;
@@ -286,15 +286,20 @@ public class Engine {
     }
 
     private void save(WorldGenerator wg) {
-        File file = new File("savedWorld.txt");
+        File f = new File("./save_data");
         try {
-            if (!file.exists()) {
-                file.createNewFile();
+            if (!f.exists()) {
+                f.createNewFile();
             }
-            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(file));
-            outputStream.writeObject(wg);
+            FileOutputStream fs = new FileOutputStream(f);
+            ObjectOutputStream os = new ObjectOutputStream(fs);
+            os.writeObject(wg);
+        }  catch (FileNotFoundException e) {
+            System.out.println("file not found");
+            System.exit(0);
         } catch (IOException e) {
             System.out.println(e);
+            System.exit(0);
         }
     }
 
