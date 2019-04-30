@@ -21,7 +21,7 @@ public class Engine {
     private boolean gameRunning = false;
     private boolean seedInputRunning = false;
     private boolean menuRunning = true;
-    private WorldGenerator currWorld;
+    private WorldGenerator newWorld;
     TETile[][] renderTiles = null;
 
     /**
@@ -36,42 +36,61 @@ public class Engine {
         drawMenu();
 
         while (!(last.equals('q'))) {
-            if (!StdDraw.hasNextKeyTyped()) { //runs below if key is pressed.
+            if (StdDraw.hasNextKeyTyped()) { //runs below if key is pressed.
                 last = StdDraw.nextKeyTyped();
 
                 if (menuRunning) {
+//                    if (last.equals('N') || last.equals('n')) {
+//                        System.out.print("case n");
+//                        savedWorld = "";
+//                        savedWorld += last.toString();
+//                        seedInputRunning = true;
+//                        menuRunning = false;
+//                    }  else if () {
+//
+//                    } else {
+//
+//                    }
+
                     switch(last) {
                         case ('N'):
                         case ('n'): {
+                            System.out.print("case n");
                             savedWorld = "";
-                            savedWorld += last;
+                            savedWorld += last.toString();
                             seedInputRunning = true;
                             menuRunning = false;
+                            break;
                         }
                         case ('L'):
                         case ('l'): {
+                            System.out.print("case l");
                             renderTiles = interactWithInputString(savedWorld);
                             savedWorld += last;
+                            break;
                         }
                         case ('Q'):
                         case ('q'): {
                             System.exit(0);
                         }
                     }
-                }
-
-                if (gameRunning) {
-                    WASD(currWorld, last);
-                    ter.renderFrame(currWorld.getTeTile());
-                }
-
-                if (seedInputRunning) {
+                } else if (gameRunning) {
+                    WASD(newWorld, last);
+                    ter.renderFrame(newWorld.getTeTile());
+                } else if (seedInputRunning) {
                     if (last.equals('s') || last.equals('S')) {
-                        renderTiles = interactWithInputString(savedWorld);
-
-                    } else {
+                        savedWorld += last;
+                        ter.initialize(WIDTH, HEIGHT);
+                        this.renderTiles = interactWithInputString(savedWorld);
+                        ter.renderFrame(renderTiles);
+                        seedInputRunning = false;
+                        gameRunning = true;
+                    }
+                    if (Character.isDigit(last)) {
                         savedWorld += last;
                     }
+                } else {
+                    //does nothing :/
                 }
 
                 last = new Character(' ');
@@ -158,7 +177,7 @@ public class Engine {
 //                }
 
                 //System.out.println(seed);
-                WorldGenerator newWorld = new WorldGenerator(WIDTH, HEIGHT, seed);
+                this.newWorld = new WorldGenerator(WIDTH, HEIGHT, seed);
                 Random random = new Random(seed);
                 //make up to 35 random rooms
                 newWorld.addRooms(RandomUtils.uniform(random, 35) + 1);
