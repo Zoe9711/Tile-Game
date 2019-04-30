@@ -16,12 +16,15 @@ public class Engine {
     private static final int HEIGHT = 30;
     private static final int MWIDTH = 60;
     private static final int MHEIGHT = 40;
+    private WorldGenerator savedWorld;
     /**
      * Method used for exploring a fresh world. This method should handle all inputs,
      * including inputs from the main menu.
      */
     public void interactWithKeyboard() {
+        drawCanvas();
         drawMenu();
+
 
     }
 
@@ -152,16 +155,27 @@ public class Engine {
     }
 
     private void drawMenu() {
-        Font title = new Font("Times New Roman", Font.BOLD, 20);
+        
+        Font title = new Font("Times New Roman", Font.BOLD, 40);
         StdDraw.setFont(title);
         StdDraw.setPenColor(Color.white);
         StdDraw.text(MWIDTH / 2, MHEIGHT * 2 / 3, "My World");
-        Font other = new Font("Times New Roman", Font.PLAIN, 12);
+        Font other = new Font("Times New Roman", Font.PLAIN, 24);
         StdDraw.setFont(other);
         StdDraw.text(MWIDTH / 2, MHEIGHT / 2, "New Game (N)");
         StdDraw.text(MWIDTH / 2, MHEIGHT * 2 / 5, "Load Game (L)");
         StdDraw.text(MWIDTH / 2, MHEIGHT * 3 / 10, "Quit (Q)");
         StdDraw.show();
+    }
+
+    private void drawCanvas() {
+        StdDraw.setCanvasSize(MWIDTH * 16, MHEIGHT * 16);
+        Font font = new Font("Times New Roman", Font.BOLD, 100);
+        StdDraw.setFont(font);
+        StdDraw.setXscale(0, MWIDTH);
+        StdDraw.setYscale(0, MHEIGHT);
+        StdDraw.clear(Color.BLACK);
+        StdDraw.enableDoubleBuffering();
     }
 
     private void mouse(WorldGenerator wg) {
