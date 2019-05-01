@@ -34,6 +34,7 @@ public class Engine {
         Character last = new Character(' ');
         String seed = "";
 
+        //ter.initialize(WIDTH, HEIGHT);
         drawCanvas();
         drawMenu();
 
@@ -78,11 +79,15 @@ public class Engine {
                         }
                     }
                 } else if (gameRunning) {
-                    savedWorld += last.toString();
+                    System.out.println("gameRunning");
+                    WASD(last);
+                    ter.renderFrame(newWorld.getTeTile());
                     int i = savedWorld.length() - 2;
+                    System.out.println("last: " + last);
                     if (savedWorld.charAt(i) == ':' && (savedWorld.charAt(i + 1) == 'q'
                             || savedWorld.charAt(i + 1) == 'Q')) {
-                        save(newWorld);
+                        System.out.println("quit");
+                        save(savedWorld);
                         drawCanvas();
                         notification("Saved");
                         StdDraw.pause(5000);
@@ -90,29 +95,33 @@ public class Engine {
                         System.exit(0);
                     }
 
-                WASD(last);
-                ter.renderFrame(newWorld.getTeTile());
+
             } else if (seedInputRunning) {
-
-                if ((last.equals('s') || last.equals('S')) && (!seed.isEmpty())) {
-
+                    if ((!Character.isDigit(last) && !last.equals('s')) || (!Character.isDigit(last) && !last.equals('S'))) {
+                        warning();
+                    }
+                if ((!seed.equals("") && last.equals('s')) || (!seed.equals("") && last.equals('S'))) {
+                    System.out.println("seedInputRunning else case 1");
                     savedWorld += last.toString();
                     ter.initialize(WIDTH, HEIGHT);
+                    System.out.println(savedWorld);
                     this.renderTiles = interactWithInputString(savedWorld);
                     ter.renderFrame(renderTiles);
                     seedInputRunning = false;
                     gameRunning = true;
-                } else if (last.equals('s') || last.equals('S')) {
+                }
+
+                if ((seed.isEmpty() && last.equals('s')) || (seed.isEmpty() && last.equals('S'))) {
+                    System.out.println("seedInputRunning else case 2");
                     warning();
                     }
+
 
                 if (Character.isDigit(last)) {
                     savedWorld += last.toString();
                     seed += last.toString();
                     seedMenu(seed);
-                } else {
-                    warning();
-
+                    System.out.println(seed);
                 }
             }
 
@@ -247,6 +256,18 @@ public class Engine {
                 savedWorld += key.toString();
                 break;
             }
+
+            case (':'): {
+                savedWorld += key.toString();
+                break;
+            }
+
+            case ('q'):
+            case ('Q'): {
+                savedWorld += key.toString();
+                break;
+            }
+
         }
     }
 
@@ -323,15 +344,15 @@ public class Engine {
         StdDraw.show();
     }
 
-    private void save(WorldGenerator wg) {
-        File f = new File("./save_data");
+    private void save(String s) {
+        File f = new File("./save_data.txt");
         try {
             if (!f.exists()) {
                 f.createNewFile();
             }
             FileOutputStream fs = new FileOutputStream(f);
             ObjectOutputStream os = new ObjectOutputStream(fs);
-            os.writeObject(wg);
+            os.writeObject(s);
         }  catch (FileNotFoundException e) {
             System.out.println("file not found");
             System.exit(0);
