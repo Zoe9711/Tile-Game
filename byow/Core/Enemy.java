@@ -1,22 +1,20 @@
 package byow.Core;
 
+
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
 import java.io.Serializable;
 
-public class Player implements Serializable, GameCharacter {
+public class Enemy implements Serializable, GameCharacter {
     private Position p;
     private int startX;
     private int startY;
 
-    public Player(Position p) {
+    public Enemy(Position p) {
         this.p = p;
         this.startX = p.x();
         this.startY = p.y();
-//        this.endX = startX + width + 3;
-//        this.startY = p.y() + 1;
-//        this.endY = startY + height - 3;;
     }
 
     @Override
@@ -36,14 +34,14 @@ public class Player implements Serializable, GameCharacter {
 
     @Override
     public void addOnMap(TETile[][] world, Position p) {
-        world[p.x()][p.y()] = Tileset.AVATAR;
+        world[p.x()][p.y()] = Tileset.FLOWER;
         this.p = p;
     }
 
     @Override
     public void move(TETile[][] world, Position o, Position n) {
         world[o.x()][o.y()] = Tileset.FLOOR;
-        world[n.x()][n.y()] = Tileset.AVATAR;
+        world[n.x()][n.y()] = Tileset.FLOWER;
         this.p = n;
     }
 

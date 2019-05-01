@@ -43,18 +43,6 @@ public class Engine {
                 last = StdDraw.nextKeyTyped();
 
                 if (menuRunning) {
-//                    if (last.equals('N') || last.equals('n')) {
-//                        System.out.print("case n");
-//                        savedWorld = "";
-//                        savedWorld += last.toString();
-//                        seedInputRunning = true;
-//                        menuRunning = false;
-//                    }  else if () {
-//
-//                    } else {
-//
-//                    }
-
                     switch (last) {
                         case ('N'):
                         case ('n'): {
@@ -131,7 +119,12 @@ public class Engine {
                 }
             }
 
-            last = new Character(' ');
+                last = new Character(' ');
+                newWorld.moveEnemies();
+                if (newWorld.isPlayerKilled()) {
+                    //make menu of getting killed lmao "You died" -- no save needed
+                    System.exit(0); //placeholder for now
+                }
         }
     }
 
@@ -216,6 +209,7 @@ public class Engine {
                 newWorld.addHallways();
                 newWorld.cleanAndFill();
                 newWorld.addPlayers();
+                newWorld.addEnemies();
                 finalWorldFrame = newWorld.getTeTile();
             }
         }
@@ -232,7 +226,7 @@ public class Engine {
             case ('W'):
             case ('w'): {
                 if (up.equals(Tileset.FLOOR)) {
-                    newWorld.moveUp();
+                    newWorld.setPlayer(new Player(newWorld.thePlayer().moveUp(newWorld.getTeTile(), newWorld.getPlayer())));
                 }
                 savedWorld += key.toString();
                 break;
@@ -240,7 +234,7 @@ public class Engine {
             case ('S'):
             case ('s'): {
                 if (down.equals(Tileset.FLOOR)) {
-                    newWorld.moveDown();
+                    newWorld.setPlayer(new Player(newWorld.thePlayer().moveDown(newWorld.getTeTile(), newWorld.getPlayer())));
                 }
                 savedWorld += key.toString();
                 break;
@@ -248,7 +242,7 @@ public class Engine {
             case ('A'):
             case ('a'): {
                 if (left.equals(Tileset.FLOOR)) {
-                    newWorld.moveLeft();
+                    newWorld.setPlayer(new Player(newWorld.thePlayer().moveLeft(newWorld.getTeTile(), newWorld.getPlayer())));
                 }
                 savedWorld += key.toString();
                 break;
@@ -256,7 +250,7 @@ public class Engine {
             case ('D'):
             case ('d'): {
                 if (right.equals(Tileset.FLOOR)) {
-                    newWorld.moveRight();
+                    newWorld.setPlayer(new Player(newWorld.thePlayer().moveRight(newWorld.getTeTile(), newWorld.getPlayer())));
 
                 }
                 savedWorld += key.toString();
@@ -388,5 +382,4 @@ public class Engine {
         }
         return "";
     }
-
 }
