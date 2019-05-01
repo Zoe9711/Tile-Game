@@ -89,11 +89,9 @@ public class Engine {
                         System.exit(0);
                     }
 
+                    tryGameOver(); // after your move -- for when player is next to enemy before moving to it
                     newWorld.moveEnemies();
-                    if (newWorld.isPlayerKilled()) {
-                        //make menu of getting killed lmao "You died" -- no save needed
-                        System.exit(0); //placeholder for now
-                    }
+                    tryGameOver(); //after their move -- for when player doesn't move or enemy reaches you first
 
 
             } else if (seedInputRunning) {
@@ -205,13 +203,6 @@ public class Engine {
 
                 //System.out.println(seed);
                 this.newWorld = new WorldGenerator(WIDTH, HEIGHT, seed);
-                Random random = new Random(seed);
-                //make up to 35 random rooms
-                newWorld.addRooms(RandomUtils.uniform(random, 35) + 1);
-                newWorld.addHallways();
-                newWorld.cleanAndFill();
-                newWorld.addPlayers();
-                newWorld.addEnemies();
                 finalWorldFrame = newWorld.getTeTile();
             }
         }
@@ -271,6 +262,14 @@ public class Engine {
                 break;
             }
 
+        }
+        System.out.println("Player Location: (" + newWorld.getPlayer().x() + ", " + newWorld.getPlayer().y() + ")");
+    }
+
+    private void tryGameOver() {
+        if (newWorld.isPlayerKilled()) {
+            //make menu of getting killed lmao "You died" -- no save needed
+            System.exit(0); //placeholder for now
         }
     }
 

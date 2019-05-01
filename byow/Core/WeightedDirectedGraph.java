@@ -3,10 +3,7 @@ package byow.Core;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * A very simple (and literal) example of an AStarGraph.
@@ -18,6 +15,7 @@ public class WeightedDirectedGraph implements AStarGraph<Position> {
         private List<WeightedEdge<Position>> list;
 
         private EdgeList(Position p) {
+            list = new LinkedList<>();
             addEdgesOfTile(p, 1);
         }
 
@@ -52,6 +50,7 @@ public class WeightedDirectedGraph implements AStarGraph<Position> {
 
 
     public WeightedDirectedGraph(WorldGenerator w, int width, int height) {
+        mapping = new HashMap<>();
         adj = new ArrayList<>();
         world = w;
         int index = 0;
@@ -64,7 +63,6 @@ public class WeightedDirectedGraph implements AStarGraph<Position> {
                     mapping.put(pos, index);
                     index += 1;
                 }
-
             }
 
         }
@@ -72,11 +70,13 @@ public class WeightedDirectedGraph implements AStarGraph<Position> {
 
     @Override
     public List<WeightedEdge<Position>> neighbors(Position v) {
+        System.out.println(mapping.get(v)); //null
+        System.out.println("Location: (" + v.x() + ", " + v.y() + ")");
         return adj.get(mapping.get(v)).list;
     }
 
-    /* Very crude heuristic that just returns the weight
-       of the smallest edge out of vertex s.
+
+    /* Decent heuristic that just returns distance between two points on game map.
      */
     @Override
     public double estimatedDistanceToGoal(Position p, Position goal) {
@@ -88,7 +88,7 @@ public class WeightedDirectedGraph implements AStarGraph<Position> {
 //            }
 //        }
 //        return estimate;
-        return 0;
+        return Math.sqrt((p.x()-goal.x())*(p.x()-goal.x()) + (p.y()-goal.y())*(p.y()-goal.y()));
     }
 
 

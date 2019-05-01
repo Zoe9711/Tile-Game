@@ -36,13 +36,20 @@ public class WorldGenerator implements Serializable {
         this.enemies = new LinkedList<>();
         this.charToPositions = new HashMap<>();
 
-
         this.world = new TETile[width][height];
         for (int x = 0; x < width; x += 1) {
             for (int y = 0; y < height; y += 1) {
                 world[x][y] = Tileset.NOTHING;
             }
         }
+        Random random = new Random(seed);
+        //make up to 35 random rooms
+        addRooms(RandomUtils.uniform(random, 35) + 1);
+        addHallways();
+        cleanAndFill();
+        addPlayers();
+        addEnemies();
+        this.aStarGraph = new WeightedDirectedGraph(this, w, h);
     }
 
     public TETile[][] getTeTile() {
@@ -135,29 +142,47 @@ public class WorldGenerator implements Serializable {
     //AStar on each enemy, move that way and update positions +
     // keep moving for about 3 or less spots before calling this method again
     public void moveEnemies() {
-//        Position newPosition = null;
-//        for (Enemy enemy : enemies) {
-//            Position up = new Position(enemy.getStartX(), enemy.getStartY() + 1);
-//            Position down = new Position(enemy.getStartX(), enemy.getStartY() - 1);
-//            Position left = new Position(enemy.getStartX() - 1, enemy.getStartY());
-//            Position right = new Position(enemy.getStartX() + 1, enemy.getStartY());
-//
-//            for (int i = 0; i < 4; i++) {
-//                // checks the 4 positions using graph
-//                // full of map's floors only and calculate nearest to player position
-//                // Compare for  each "moves needed" and go for that position
-//            }
-//
-//            this.charToPositions.put(enemy, newPosition);
-//        }
+        for (Enemy enemy : enemies) {
+            Position up = new Position(enemy.getStartX(), enemy.getStartY() + 1);
+            Position down = new Position(enemy.getStartX(), enemy.getStartY() - 1);
+            Position left = new Position(enemy.getStartX() - 1, enemy.getStartY());
+            Position right = new Position(enemy.getStartX() + 1, enemy.getStartY());
+            ArrayList<Position> wasd = new ArrayList<>();
+            wasd.add(up);
+            wasd.add(down);
+            wasd.add(left);
+            wasd.add(right);
 
+            ArrayList<Position> wasdP = new ArrayList<>();
+            //get rid of any walls, can't go there! Don't estimate it.
+            for (Position p : wasd) {
+                if (!world[p.x()][p.y()].equals(Tileset.WALL)) {
+                    wasdP.add(p);
+                }
+            }
 
+            // checks the 4 positions using graph
+            // full of map's floors only and calculate nearest to player position
+            HashMap<Position, Double> movesFour = new HashMap<>();
+            for (Position p : wasdP) {
+                ShortestPathsSolver<Position> solver = new AStarSolver<>(aStarGraph, p, getPlayer(), 20);
+                movesFour.put(p, solver.solutionWeight());
+            }
+
+            // Compare for  each "moves needed" and go for that position
+            Position bestPos = up;
+            for (Position p : wasdP) {
+                if (movesFour.get(p) < movesFour.get(bestPos)) {
+                    bestPos = p;
+                }
+            }
+            this.charToPositions.put(enemy, bestPos);
+            enemy.move(world, enemy.getPosition(), bestPos, Tileset.FLOWER);
+        }
     }
 
     public boolean isPlayerKilled() {
-        System.out.println(enemies.size());
         for (Enemy enemy : enemies) {
-            System.out.println(charToPositions.get(enemy));
             if (charToPositions.get(enemy).equals(player.getPosition())) {
                 return true;
             }
