@@ -41,9 +41,16 @@ public class Player implements Serializable, GameCharacter {
     }
 
     @Override
-    public void move(TETile[][] world, Position o, Position n) {
-        world[o.x()][o.y()] = Tileset.FLOOR;
-        world[n.x()][n.y()] = Tileset.AVATAR;
+    public void move(TETile[][] world, Position o, Position n, TETile t) {
+        if (t.equals(Tileset.FLOOR)) {
+            world[o.x()][o.y()] = Tileset.FLOOR;
+            world[n.x()][n.y()] = Tileset.AVATAR;
+        }
+
+        if (t.equals(Tileset.FLOWER)) {
+            world[o.x()][o.y()] = Tileset.FLOOR;
+            world[n.x()][n.y()] = Tileset.FLOWER;
+        }
         this.p = n;
     }
 

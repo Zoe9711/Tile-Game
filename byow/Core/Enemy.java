@@ -39,10 +39,13 @@ public class Enemy implements Serializable, GameCharacter {
     }
 
     @Override
-    public void move(TETile[][] world, Position o, Position n) {
+    public void move(TETile[][] world, Position o, Position n, TETile t) {
         world[o.x()][o.y()] = Tileset.FLOOR;
         world[n.x()][n.y()] = Tileset.FLOWER;
         this.p = n;
+        if (t.equals(Tileset.FLOWER)) {
+            world[n.x()][n.y()] = Tileset.AVATAR;
+        }
     }
 
 

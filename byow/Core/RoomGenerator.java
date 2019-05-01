@@ -61,10 +61,10 @@ public class RoomGenerator implements Serializable {
         while (!items.isEmpty()) {
             newList.add(items.dequeue());
         }
-        System.out.println(newList.size());
-        for (Room i: newList) {
-            System.out.println(i.getId());
-        }
+//        System.out.println(newList.size());
+//        for (Room i: newList) {
+//            System.out.println(i.getId());
+//        }
         return newList;
     }
 

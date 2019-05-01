@@ -72,7 +72,7 @@ public class WeightedDirectedGraph implements AStarGraph<Position> {
 
     @Override
     public List<WeightedEdge<Position>> neighbors(Position v) {
-        return adj.get(mapping.get(v));
+        return adj.get(mapping.get(v)).list;
     }
 
     /* Very crude heuristic that just returns the weight
@@ -80,14 +80,15 @@ public class WeightedDirectedGraph implements AStarGraph<Position> {
      */
     @Override
     public double estimatedDistanceToGoal(Position p, Position goal) {
-        List<WeightedEdge<Position>> edges = neighbors(p);
-        double estimate = Double.POSITIVE_INFINITY;
-        for (WeightedEdge<Position> e : edges) {
-            if (e.weight() < estimate) {
-                estimate = e.weight();
-            }
-        }
-        return estimate;
+//        List<WeightedEdge<Position>> edges = neighbors(p);
+//        double estimate = Double.POSITIVE_INFINITY;
+//        for (WeightedEdge<Position> e : edges) {
+//            if (e.weight() < estimate) {
+//                estimate = e.weight();
+//            }
+//        }
+//        return estimate;
+        return 0;
     }
 
 

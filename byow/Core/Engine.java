@@ -89,6 +89,12 @@ public class Engine {
                         System.exit(0);
                     }
 
+                    newWorld.moveEnemies();
+                    if (newWorld.isPlayerKilled()) {
+                        //make menu of getting killed lmao "You died" -- no save needed
+                        System.exit(0); //placeholder for now
+                    }
+
 
             } else if (seedInputRunning) {
                     if ((!Character.isDigit(last) && !last.equals('s')) || (!Character.isDigit(last) && !last.equals('S'))) {
@@ -120,11 +126,7 @@ public class Engine {
             }
 
                 last = new Character(' ');
-                newWorld.moveEnemies();
-                if (newWorld.isPlayerKilled()) {
-                    //make menu of getting killed lmao "You died" -- no save needed
-                    System.exit(0); //placeholder for now
-                }
+
         }
     }
 
@@ -225,15 +227,16 @@ public class Engine {
         switch (key) {
             case ('W'):
             case ('w'): {
-                if (up.equals(Tileset.FLOOR)) {
+                if (up.equals(Tileset.FLOOR) || up.equals(Tileset.FLOWER)) {
                     newWorld.setPlayer(new Player(newWorld.thePlayer().moveUp(newWorld.getTeTile(), newWorld.getPlayer())));
                 }
+
                 savedWorld += key.toString();
                 break;
             }
             case ('S'):
             case ('s'): {
-                if (down.equals(Tileset.FLOOR)) {
+                if (down.equals(Tileset.FLOOR) || down.equals(Tileset.FLOWER)) {
                     newWorld.setPlayer(new Player(newWorld.thePlayer().moveDown(newWorld.getTeTile(), newWorld.getPlayer())));
                 }
                 savedWorld += key.toString();
@@ -241,7 +244,7 @@ public class Engine {
             }
             case ('A'):
             case ('a'): {
-                if (left.equals(Tileset.FLOOR)) {
+                if (left.equals(Tileset.FLOOR) || left.equals(Tileset.FLOWER)) {
                     newWorld.setPlayer(new Player(newWorld.thePlayer().moveLeft(newWorld.getTeTile(), newWorld.getPlayer())));
                 }
                 savedWorld += key.toString();
@@ -249,7 +252,7 @@ public class Engine {
             }
             case ('D'):
             case ('d'): {
-                if (right.equals(Tileset.FLOOR)) {
+                if (right.equals(Tileset.FLOOR) || right.equals(Tileset.FLOWER)) {
                     newWorld.setPlayer(new Player(newWorld.thePlayer().moveRight(newWorld.getTeTile(), newWorld.getPlayer())));
 
                 }

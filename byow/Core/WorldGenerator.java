@@ -125,6 +125,7 @@ public class WorldGenerator implements Serializable {
                 enemyToAdd.addOnMap(this.world, enemyP);
                 this.enemies.add(enemyToAdd);
                 enemiesAddedCorrectly += 1;
+                this.charToPositions.put(enemyToAdd, enemyP);
             }
 
         }
@@ -134,27 +135,29 @@ public class WorldGenerator implements Serializable {
     //AStar on each enemy, move that way and update positions +
     // keep moving for about 3 or less spots before calling this method again
     public void moveEnemies() {
-        Position newPosition = null;
-        for (Enemy enemy : enemies) {
-            Position up = new Position(enemy.getStartX(), enemy.getStartY() + 1);
-            Position down = new Position(enemy.getStartX(), enemy.getStartY() - 1);
-            Position left = new Position(enemy.getStartX() - 1, enemy.getStartY());
-            Position right = new Position(enemy.getStartX() + 1, enemy.getStartY());
-
-            for (int i = 0; i < 4; i++) {
-                // checks the 4 positions using graph
-                // full of map's floors only and calculate nearest to player position
-                // Compare for  each "moves needed" and go for that position
-            }
-
-            this.charToPositions.put(enemy, newPosition);
-        }
+//        Position newPosition = null;
+//        for (Enemy enemy : enemies) {
+//            Position up = new Position(enemy.getStartX(), enemy.getStartY() + 1);
+//            Position down = new Position(enemy.getStartX(), enemy.getStartY() - 1);
+//            Position left = new Position(enemy.getStartX() - 1, enemy.getStartY());
+//            Position right = new Position(enemy.getStartX() + 1, enemy.getStartY());
+//
+//            for (int i = 0; i < 4; i++) {
+//                // checks the 4 positions using graph
+//                // full of map's floors only and calculate nearest to player position
+//                // Compare for  each "moves needed" and go for that position
+//            }
+//
+//            this.charToPositions.put(enemy, newPosition);
+//        }
 
 
     }
 
     public boolean isPlayerKilled() {
+        System.out.println(enemies.size());
         for (Enemy enemy : enemies) {
+            System.out.println(charToPositions.get(enemy));
             if (charToPositions.get(enemy).equals(player.getPosition())) {
                 return true;
             }
