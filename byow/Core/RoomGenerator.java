@@ -4,12 +4,13 @@ import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 import edu.princeton.cs.algs4.Queue;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class RoomGenerator {
+public class RoomGenerator implements Serializable {
     private ArrayList<Room> roomList; //list of hallways for cleaning
     private HashMap<Integer, Room> roomMap;
 

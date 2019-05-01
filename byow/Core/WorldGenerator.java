@@ -8,8 +8,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.LinkedList;
+import java.io.Serializable;
 
-public class WorldGenerator {
+public class WorldGenerator implements Serializable {
     private int width;
     private int height;
     private long seed;

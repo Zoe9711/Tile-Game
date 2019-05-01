@@ -2,7 +2,9 @@ package byow.Core;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
-public class Hallway {
+import java.io.Serializable;
+
+public class Hallway implements Serializable {
     private Position start; //left or bottom of hall: one pixel away from the last wall
     private Position end; //right or top of hall: one pixel away from the last wall
     private int length; //does not include start and end points

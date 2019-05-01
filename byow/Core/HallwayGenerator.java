@@ -1,12 +1,13 @@
 package byow.Core;
 
 import byow.TileEngine.TETile;
+import java.io.Serializable;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-public class HallwayGenerator {
+public class HallwayGenerator implements Serializable {
     private List<Hallway> hallwayList; //list of hallways for cleaning
     private Random randomGenerator;
 

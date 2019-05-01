@@ -1,7 +1,7 @@
 package byow.Core;
+import java.io.Serializable;
 
-
-public class Position {
+public class Position implements Serializable {
     private int x;
     private int y;
 

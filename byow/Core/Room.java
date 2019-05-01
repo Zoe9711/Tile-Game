@@ -3,9 +3,10 @@ package byow.Core;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
+import java.io.Serializable;
 import java.util.Random;
 
-public class Room implements Comparable {
+public class Room implements Comparable, Serializable {
     private Position p; //bottom left corner of the room, wall
     private int width;  //including the wall
     private int height; //including the wall

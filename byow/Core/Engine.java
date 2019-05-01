@@ -7,8 +7,10 @@ import edu.princeton.cs.introcs.StdDraw;
 
 import java.awt.*;
 import java.io.*;
+import java.lang.invoke.MethodHandle;
 import java.util.ArrayList;
 import java.util.Random;
+
 
 public class Engine {
     TERenderer ter = new TERenderer();
@@ -52,7 +54,7 @@ public class Engine {
 //
 //                    }
 
-                    switch(last) {
+                    switch (last) {
                         case ('N'):
                         case ('n'): {
                             System.out.print("case n");
@@ -76,30 +78,50 @@ public class Engine {
                         }
                     }
                 } else if (gameRunning) {
-                    WASD(last);
-                    ter.renderFrame(newWorld.getTeTile());
-                } else if (seedInputRunning) {
-                    if (last.equals('s') || last.equals('S')) {
-                        savedWorld += last.toString();
-                        ter.initialize(WIDTH, HEIGHT);
-                        this.renderTiles = interactWithInputString(savedWorld);
-                        ter.renderFrame(renderTiles);
-                        seedInputRunning = false;
-                        gameRunning = true;
+                    savedWorld += last.toString();
+                    int i = savedWorld.length() - 2;
+                    if (savedWorld.charAt(i) == ':' && (savedWorld.charAt(i + 1) == 'q'
+                            || savedWorld.charAt(i + 1) == 'Q')) {
+                        save(newWorld);
+                        drawCanvas();
+                        notification("Saved");
+                        StdDraw.pause(5000);
+                        gameRunning = false;
+                        System.exit(0);
                     }
-                    if (Character.isDigit(last)) {
-                        savedWorld += last.toString();
-                        seed += last.toString();
-                        seedMenu(seed);
-                    }
-                } else {
-                    //does nothing :/
-                }
 
-                last = new Character(' ');
+                WASD(last);
+                ter.renderFrame(newWorld.getTeTile());
+            } else if (seedInputRunning) {
+
+                if ((last.equals('s') || last.equals('S')) && (!seed.isEmpty())) {
+
+                    savedWorld += last.toString();
+                    ter.initialize(WIDTH, HEIGHT);
+                    this.renderTiles = interactWithInputString(savedWorld);
+                    ter.renderFrame(renderTiles);
+                    seedInputRunning = false;
+                    gameRunning = true;
+                } else if (last.equals('s') || last.equals('S')) {
+                    warning();
+                    }
+
+                if (Character.isDigit(last)) {
+                    savedWorld += last.toString();
+                    seed += last.toString();
+                    seedMenu(seed);
+                } else {
+                    warning();
+
+                }
             }
+
+            last = new Character(' ');
         }
     }
+
+}
+
 
     /**
      * Method used for autograding and testing your code. The input string will be a series
@@ -227,6 +249,22 @@ public class Engine {
             }
         }
     }
+
+    private void notification(String s) {
+        StdDraw.clear(Color.BLACK);
+        Font title = new Font("Times New Roman", Font.BOLD, 40);
+        StdDraw.setFont(title);
+        StdDraw.setPenColor(Color.WHITE);
+        StdDraw.text(MWIDTH / 2, MHEIGHT / 2, s);
+        StdDraw.show();
+    }
+
+    private void warning() {
+        StdDraw.clear(Color.BLACK);
+        StdDraw.text(MWIDTH / 2, MHEIGHT /2, "Put a number");
+        StdDraw.show();
+    }
+
 
     private void drawMenu() {
 

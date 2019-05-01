@@ -3,9 +3,9 @@ package byow.Core;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
-import java.util.Random;
+import java.io.Serializable;
 
-public class Player {
+public class Player implements Serializable {
     private Position p;
     private int startX;
     private int startY;
