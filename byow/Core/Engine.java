@@ -69,8 +69,13 @@ public class Engine {
                         case ('L'):
                         case ('l'): {
                             System.out.print("case l");
-                            renderTiles = interactWithInputString(savedWorld);
+                            String loadString = load();
+                            renderTiles = interactWithInputString(loadString);
+                            ter.renderFrame(renderTiles);
                             savedWorld += last;
+                            menuRunning = false;
+                            seedInputRunning = false;
+                            gameRunning = true;
                             break;
                         }
                         case ('Q'):
@@ -87,7 +92,8 @@ public class Engine {
                     if (savedWorld.charAt(i) == ':' && (savedWorld.charAt(i + 1) == 'q'
                             || savedWorld.charAt(i + 1) == 'Q')) {
                         System.out.println("quit");
-                        save(savedWorld);
+                        String savedString = savedWorld.substring(0, savedWorld.length() - 3);
+                        save(savedString);
                         drawCanvas();
                         notification("Saved");
                         StdDraw.pause(5000);
@@ -362,5 +368,25 @@ public class Engine {
         }
     }
 
+    private static String load() {
+        File f = new File("./save_data.txt");
+        if (f.exists()) {
+            try {
+                FileInputStream fs = new FileInputStream(f);
+                ObjectInputStream os = new ObjectInputStream(fs);
+                return (String) os.readObject();
+            } catch (FileNotFoundException e) {
+                System.out.println("file not found");
+                System.exit(0);
+            } catch (IOException e) {
+                System.out.println(e);
+                System.exit(0);
+            } catch (ClassNotFoundException e) {
+                System.out.println("class not found");
+                System.exit(0);
+            }
+        }
+        return "";
+    }
 
 }
