@@ -57,6 +57,8 @@ public class WorldGenerator implements Serializable {
         return this.world;
     }
 
+    public TETile[][] setTeTile(TETile[][] world) { this.world = world};
+
     public Position getPlayer() {
         return this.player.getPosition();
     }

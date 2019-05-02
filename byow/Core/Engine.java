@@ -216,12 +216,8 @@ public class Engine {
 
             if (charArray.get(0).equals('l') || charArray.get(0).equals('L')) {
                 String loadString = load();
-
-
-
-                this.newWorld = interactWithKeyboard(loadString);
-
-                moveCharactersL();
+                this.newWorld.setTeTile(interactWithInputString(loadString));
+                moveCharactersL(0, charArray);
 
             }
 
