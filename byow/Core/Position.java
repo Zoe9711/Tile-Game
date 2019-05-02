@@ -16,16 +16,31 @@ public class Position implements Serializable {
             return true;
         }
 
-        /* Check if o is an instance of Complex or not
-          "null instanceof [type]" also returns false */
-        if (!(o instanceof Position)) {
-            return false;
-        }
+//        /* Check if o is an instance of Complex or not
+//          "null instanceof [type]" also returns false */
+//        if (!(o.getClass().equals(Position.class))) {
+//            System.out.println("HI");
+//            return false;
+//        }
 
         // typecast o to Complex so that we can compare data members
         Position c = (Position) o;
 
+//        System.out.println("boolean: ");
+
+//        System.out.println((this.x == c.x && this.y == c.y));
+//        System.out.println(this.x);
+//        System.out.println(c.x);
+//        System.out.println(this.y);
+//        System.out.println(c.y);
+
         return this.x == c.x && this.y == c.y;
+    }
+
+
+    @Override
+    public int hashCode() {
+        return (this.x * 10000000 + this.y * 10);
     }
 
     public int x() {

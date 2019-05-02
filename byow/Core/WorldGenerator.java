@@ -23,7 +23,7 @@ public class WorldGenerator implements Serializable {
     private Player player;
     private LinkedList<Enemy> enemies;
     private HashMap<GameCharacter, Position> charToPositions;
-    private AStarGraph<Position> aStarGraph;
+    private WeightedDirectedGraph aStarGraph;
 
     public WorldGenerator(int w, int h, long seed) {
         this.width = w;
@@ -47,7 +47,8 @@ public class WorldGenerator implements Serializable {
         addRooms(RandomUtils.uniform(random, 35) + 1);
         addHallways();
         cleanAndFill();
-        //this.aStarGraph = new WeightedDirectedGraph(this, w, h);
+        this.aStarGraph = new WeightedDirectedGraph(this, w, h);
+
         addPlayers();
         addEnemies();
     }
@@ -143,6 +144,7 @@ public class WorldGenerator implements Serializable {
     // keep moving for about 3 or less spots before calling this method again
     public void moveEnemies() {
         for (Enemy enemy : enemies) {
+            System.out.println(enemy.getStartX() + ", " + enemy.getStartY() + " BEFORE ASTAR POSITION");
             Position up = new Position(enemy.getStartX(), enemy.getStartY() + 1);
             Position down = new Position(enemy.getStartX(), enemy.getStartY() - 1);
             Position left = new Position(enemy.getStartX() - 1, enemy.getStartY());
@@ -170,12 +172,14 @@ public class WorldGenerator implements Serializable {
             }
 
             // Compare for  each "moves needed" and go for that position
-            Position bestPos = up;
+
+            Position bestPos = wasdP.get(0);
             for (Position p : wasdP) {
                 if (movesFour.get(p) < movesFour.get(bestPos)) {
                     bestPos = p;
                 }
             }
+            System.out.println(bestPos.x() + ", " + bestPos.y() + " AFTER ASTAR POSITION");
             this.charToPositions.put(enemy, bestPos);
             enemy.move(world, enemy.getPosition(), bestPos, Tileset.FLOWER);
             charToPositions.put(enemy, bestPos);

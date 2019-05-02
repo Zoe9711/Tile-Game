@@ -1,4 +1,4 @@
-*.txt
-*.iml
 out/
-save_data
+*.iml
+*.txt
+

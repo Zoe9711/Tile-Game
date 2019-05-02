@@ -45,12 +45,17 @@ public class WeightedDirectedGraph implements AStarGraph<Position> {
     }
 
     private ArrayList<EdgeList> adj;
-    private HashMap<Integer, Position> mapping;
+//    public HashMap<Position, Integer> mapping;
+    private ArrayList<Position> mapping1;
+    private ArrayList<Integer> mapping2;
     private WorldGenerator world;
 
 
     public WeightedDirectedGraph(WorldGenerator w, int width, int height) {
-        mapping = new HashMap<>();
+//        mapping = new HashMap<>();
+        mapping1 = new ArrayList<>();
+        mapping2 = new ArrayList<>();
+
         adj = new ArrayList<>();
         world = w;
         int index = 0;
@@ -60,27 +65,21 @@ public class WeightedDirectedGraph implements AStarGraph<Position> {
                     Position pos = new Position(i, j);
                     EdgeList vertex = new EdgeList(pos);
                     adj.add(vertex);
-                    mapping.put(index, pos);
+//                    mapping.put(pos, index);
+                    mapping1.add(pos);
+                    mapping2.add(index);
                     index += 1;
                 }
             }
 
         }
-        System.out.println(index);
+
     }
 
     @Override
     public List<WeightedEdge<Position>> neighbors(Position v) {
-        System.out.println(mapping.get(v)); //always null??
-//        for (int i = 0; i < mapping.size(); i ++) {
-//            System.out.println("the vertex: " +  mapping.get(i).x() + ", " + mapping.get(i).y());
-//
-//        }
-        System.out.println("size" + mapping.size());
-        System.out.println("Location: (" + v.x() + ", " + v.y() + ")");
-
         //return adj.get(mapping.get(v)).list;
-        return new LinkedList<>();
+        return adj.get(mapping2.get(mapping1.indexOf(v))).list;
     }
 
 

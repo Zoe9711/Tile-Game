@@ -13,8 +13,6 @@ public class Enemy implements Serializable, GameCharacter {
 
     public Enemy(Position p) {
         this.p = p;
-        this.startX = p.x();
-        this.startY = p.y();
     }
 
     @Override
@@ -36,6 +34,8 @@ public class Enemy implements Serializable, GameCharacter {
     public void addOnMap(TETile[][] world, Position p) {
         world[p.x()][p.y()] = Tileset.FLOWER;
         this.p = p;
+        this.startX = p.x();
+        this.startY = p.y();
     }
 
     @Override
@@ -43,6 +43,8 @@ public class Enemy implements Serializable, GameCharacter {
         world[o.x()][o.y()] = Tileset.FLOOR;
         world[n.x()][n.y()] = Tileset.FLOWER;
         this.p = n;
+        this.startX = n.x();
+        this.startY = n.y();
 //        if (t.equals(Tileset.FLOWER)) {
 //            world[n.x()][n.y()] = Tileset.AVATAR;
 //        }

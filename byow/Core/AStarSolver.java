@@ -59,7 +59,6 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
             }
             currVertex = this.fringe.removeSmallest();
             this.dequeueCount += 1;
-            System.out.println("start neigbors");
             List<WeightedEdge<Vertex>> neighborEdges = input.neighbors(currVertex);
             //relaxing process
             for (WeightedEdge<Vertex> e : neighborEdges) {

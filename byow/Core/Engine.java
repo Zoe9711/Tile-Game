@@ -15,10 +15,8 @@ import java.util.Random;
 public class Engine {
     TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
-//    private static final int WIDTH = 80;
-//    private static final int HEIGHT = 30;
     private static final int WIDTH = 80;
-    private static final int HEIGHT = 60;
+    private static final int HEIGHT = 30;
     private static final int MWIDTH = 60;
     private static final int MHEIGHT = 40;
     private String savedWorld = "";
@@ -96,7 +94,7 @@ public class Engine {
                     }
 
                     tryGameOver(); // after your move -- for when player is next to enemy before moving to it
-                    //newWorld.moveEnemies();
+
                     tryGameOver(); //after their move -- for when player doesn't move or enemy reaches you first
                     ter.renderFrame(newWorld.getTeTile());
 
@@ -158,7 +156,7 @@ public class Engine {
                 }
 
                 tryGameOver(); // after your move -- for when player is next to enemy before moving to it
-                //newWorld.moveEnemies();
+                newWorld.moveEnemies();
                 tryGameOver(); //after their move -- for when player doesn't move or enemy reaches you first
                 ter.renderFrame(newWorld.getTeTile());
             }
