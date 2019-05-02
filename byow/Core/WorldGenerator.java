@@ -47,9 +47,9 @@ public class WorldGenerator implements Serializable {
         addRooms(RandomUtils.uniform(random, 35) + 1);
         addHallways();
         cleanAndFill();
+        //this.aStarGraph = new WeightedDirectedGraph(this, w, h);
         addPlayers();
         addEnemies();
-        this.aStarGraph = new WeightedDirectedGraph(this, w, h);
     }
 
     public TETile[][] getTeTile() {
@@ -178,6 +178,7 @@ public class WorldGenerator implements Serializable {
             }
             this.charToPositions.put(enemy, bestPos);
             enemy.move(world, enemy.getPosition(), bestPos, Tileset.FLOWER);
+            charToPositions.put(enemy, bestPos);
         }
     }
 

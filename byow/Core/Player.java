@@ -24,6 +24,13 @@ public class Player implements Serializable, GameCharacter {
         return this.p;
     }
 
+
+    public void setNewPosition(Position np) {
+        this.p = np;
+        this.startX = np.x();
+        this.startY = np.y();
+    }
+
     @Override
     public int getStartX() {
         return this.startX;

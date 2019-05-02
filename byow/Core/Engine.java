@@ -15,8 +15,10 @@ import java.util.Random;
 public class Engine {
     TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
-    private static final int WIDTH = 80;
-    private static final int HEIGHT = 30;
+//    private static final int WIDTH = 80;
+//    private static final int HEIGHT = 30;
+    private static final int WIDTH = 20;
+    private static final int HEIGHT = 20;
     private static final int MWIDTH = 60;
     private static final int MHEIGHT = 40;
     private String savedWorld = "";
@@ -74,7 +76,6 @@ public class Engine {
                 } else if (gameRunning) {
                     System.out.println("gameRunning");
                     WASD(last);
-                    ter.renderFrame(newWorld.getTeTile());
                     int i = savedWorld.length() - 2;
                     System.out.println("last: " + last);
                     if (savedWorld.charAt(i) == ':' && (savedWorld.charAt(i + 1) == 'q'
@@ -90,8 +91,9 @@ public class Engine {
                     }
 
                     tryGameOver(); // after your move -- for when player is next to enemy before moving to it
-                    newWorld.moveEnemies();
+                    //newWorld.moveEnemies();
                     tryGameOver(); //after their move -- for when player doesn't move or enemy reaches you first
+                    ter.renderFrame(newWorld.getTeTile());
 
 
             } else if (seedInputRunning) {
@@ -219,7 +221,8 @@ public class Engine {
             case ('W'):
             case ('w'): {
                 if (up.equals(Tileset.FLOOR) || up.equals(Tileset.FLOWER)) {
-                    newWorld.setPlayer(new Player(newWorld.thePlayer().moveUp(newWorld.getTeTile(), newWorld.getPlayer())));
+                    newWorld.thePlayer().setNewPosition(newWorld.thePlayer().moveUp(newWorld.getTeTile(), newWorld.getPlayer()));
+                    //newWorld.setPlayer(new Player(newWorld.thePlayer().moveUp(newWorld.getTeTile(), newWorld.getPlayer())));
                 }
 
                 savedWorld += key.toString();
@@ -228,7 +231,8 @@ public class Engine {
             case ('S'):
             case ('s'): {
                 if (down.equals(Tileset.FLOOR) || down.equals(Tileset.FLOWER)) {
-                    newWorld.setPlayer(new Player(newWorld.thePlayer().moveDown(newWorld.getTeTile(), newWorld.getPlayer())));
+                    newWorld.thePlayer().setNewPosition(newWorld.thePlayer().moveDown(newWorld.getTeTile(), newWorld.getPlayer()));
+                    //newWorld.setPlayer(new Player(newWorld.thePlayer().moveDown(newWorld.getTeTile(), newWorld.getPlayer())));
                 }
                 savedWorld += key.toString();
                 break;
@@ -236,7 +240,8 @@ public class Engine {
             case ('A'):
             case ('a'): {
                 if (left.equals(Tileset.FLOOR) || left.equals(Tileset.FLOWER)) {
-                    newWorld.setPlayer(new Player(newWorld.thePlayer().moveLeft(newWorld.getTeTile(), newWorld.getPlayer())));
+                    newWorld.thePlayer().setNewPosition(newWorld.thePlayer().moveLeft(newWorld.getTeTile(), newWorld.getPlayer()));
+                    //newWorld.setPlayer(new Player(newWorld.thePlayer().moveLeft(newWorld.getTeTile(), newWorld.getPlayer())));
                 }
                 savedWorld += key.toString();
                 break;
@@ -244,7 +249,8 @@ public class Engine {
             case ('D'):
             case ('d'): {
                 if (right.equals(Tileset.FLOOR) || right.equals(Tileset.FLOWER)) {
-                    newWorld.setPlayer(new Player(newWorld.thePlayer().moveRight(newWorld.getTeTile(), newWorld.getPlayer())));
+                    newWorld.thePlayer().setNewPosition(newWorld.thePlayer().moveRight(newWorld.getTeTile(), newWorld.getPlayer()));
+                    //newWorld.setPlayer(new Player(newWorld.thePlayer().moveRight(newWorld.getTeTile(), newWorld.getPlayer())));
 
                 }
                 savedWorld += key.toString();
