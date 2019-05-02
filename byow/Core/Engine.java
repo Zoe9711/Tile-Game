@@ -217,11 +217,8 @@ public class Engine {
             if (charArray.get(0).equals('l') || charArray.get(0).equals('L')) {
                 String loadString = load();
                 this.newWorld.setTeTile(interactWithInputString(loadString));
-                moveCharactersL(0, charArray);
-
+                moveCharactersL(loadString, 0, charArray);
             }
-
-
         }
 
 
@@ -237,9 +234,6 @@ public class Engine {
             WASD(c);
             if (charArray.get(i) == ':' && (charArray.get(i + 1) == 'q'
                     || charArray.get(i + 1) == 'Q')) {
-
-
-
                 String savedString = savedWorld.substring(0, savedWorld.length() - 3);
                 save(savedString);
                 drawCanvas();
@@ -251,7 +245,7 @@ public class Engine {
         }
     }
 
-    private void moveCharactersL(int wasdIndex, ArrayList<Character> charArray) {
+    private void moveCharactersL(String prev, int wasdIndex, ArrayList<Character> charArray) {
         for (int i = wasdIndex; i < charArray.size(); i++) {
             Character c = charArray.get(i);
             WASD(c);
@@ -259,7 +253,7 @@ public class Engine {
                     || charArray.get(i + 1) == 'Q')) {
                 System.out.println("quit");
                 String savedString = savedWorld.substring(0, savedWorld.length() - 3);
-                save(savedString);
+                save(prev + savedString);
                 drawCanvas();
                 notification("Saved");
                 StdDraw.pause(5000);
