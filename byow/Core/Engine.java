@@ -376,6 +376,7 @@ public class Engine {
             try {
                 FileInputStream fs = new FileInputStream(f);
                 ObjectInputStream os = new ObjectInputStream(fs);
+                System.out.println((String) os.readObject());
                 return (String) os.readObject();
             } catch (FileNotFoundException e) {
                 System.out.println("file not found");
