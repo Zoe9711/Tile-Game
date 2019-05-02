@@ -17,8 +17,8 @@ public class Engine {
     /* Feel free to change the width and height. */
 //    private static final int WIDTH = 80;
 //    private static final int HEIGHT = 30;
-    private static final int WIDTH = 20;
-    private static final int HEIGHT = 20;
+    private static final int WIDTH = 80;
+    private static final int HEIGHT = 60;
     private static final int MWIDTH = 60;
     private static final int MHEIGHT = 40;
     private String savedWorld = "";
@@ -41,9 +41,12 @@ public class Engine {
         drawMenu();
 
         while (!(last.equals('q'))) {
+            if (gameRunning) {
+                gameRunning();
+            }
+
             if (StdDraw.hasNextKeyTyped()) { //runs below if key is pressed.
                 last = StdDraw.nextKeyTyped();
-
                 if (menuRunning) {
                     switch (last) {
                         case ('N'):
@@ -73,8 +76,10 @@ public class Engine {
                             System.exit(0);
                         }
                     }
-                } else if (gameRunning) {
+                }
+/*
                     System.out.println("gameRunning");
+
                     WASD(last);
                     int i = savedWorld.length() - 2;
                     System.out.println("last: " + last);
@@ -95,8 +100,8 @@ public class Engine {
                     tryGameOver(); //after their move -- for when player doesn't move or enemy reaches you first
                     ter.renderFrame(newWorld.getTeTile());
 
-
-            } else if (seedInputRunning) {
+*/
+             else if (seedInputRunning) {
                     if ((!Character.isDigit(last) && !last.equals('s')) || (!Character.isDigit(last) && !last.equals('S'))) {
                         warning();
                     }
@@ -132,6 +137,33 @@ public class Engine {
 
 }
 
+    private void gameRunning() {
+        while (gameRunning) {
+            mouse(newWorld);
+            if (StdDraw.hasNextKeyTyped()) {
+                Character last = StdDraw.nextKeyTyped();
+                WASD(last);
+                int i = savedWorld.length() - 2;
+                System.out.println("last: " + last);
+                if (savedWorld.charAt(i) == ':' && (savedWorld.charAt(i + 1) == 'q'
+                        || savedWorld.charAt(i + 1) == 'Q')) {
+                    System.out.println("quit");
+                    String savedString = savedWorld.substring(0, savedWorld.length() - 3);
+                    save(savedString);
+                    drawCanvas();
+                    notification("Saved");
+                    StdDraw.pause(5000);
+                    gameRunning = false;
+                    System.exit(0);
+                }
+
+                tryGameOver(); // after your move -- for when player is next to enemy before moving to it
+                //newWorld.moveEnemies();
+                tryGameOver(); //after their move -- for when player doesn't move or enemy reaches you first
+                ter.renderFrame(newWorld.getTeTile());
+            }
+        }
+    }
 
     /**
      * Method used for autograding and testing your code. The input string will be a series
@@ -251,23 +283,19 @@ public class Engine {
                 if (right.equals(Tileset.FLOOR) || right.equals(Tileset.FLOWER)) {
                     newWorld.thePlayer().setNewPosition(newWorld.thePlayer().moveRight(newWorld.getTeTile(), newWorld.getPlayer()));
                     //newWorld.setPlayer(new Player(newWorld.thePlayer().moveRight(newWorld.getTeTile(), newWorld.getPlayer())));
-
                 }
                 savedWorld += key.toString();
                 break;
             }
-
             case (':'): {
                 savedWorld += key.toString();
                 break;
             }
-
             case ('q'):
             case ('Q'): {
                 savedWorld += key.toString();
                 break;
             }
-
         }
         System.out.println("Player Location: (" + newWorld.getPlayer().x() + ", " + newWorld.getPlayer().y() + ")");
     }
@@ -326,30 +354,25 @@ public class Engine {
     }
 
     private void mouse(WorldGenerator wg) {
-        TETile mPos = wg.getTeTile()[(int) StdDraw.mouseX()][(int) StdDraw.mouseY()];
-        if (mPos.equals(Tileset.AVATAR)) {
-            ter.renderFrame(wg.getTeTile());
+        StdDraw.clear(Color.BLACK);
+        if ((int) StdDraw.mouseX() < WIDTH && (int) StdDraw.mouseY() < HEIGHT) {
+            TETile mPos = wg.getTeTile()[(int) StdDraw.mouseX()][(int) StdDraw.mouseY()];
+            ter.renderFrame(newWorld.getTeTile());
             StdDraw.enableDoubleBuffering();
             StdDraw.setPenColor(Color.white);
-            StdDraw.text(WIDTH / 2, HEIGHT, "You");
-        } else if (mPos.equals(Tileset.WALL)) {
-            ter.renderFrame(wg.getTeTile());
-            StdDraw.enableDoubleBuffering();
-            StdDraw.setPenColor(Color.white);
-            StdDraw.text(WIDTH / 2, HEIGHT, "Wall");
+            if (mPos.equals(Tileset.AVATAR)) {
+                StdDraw.text(WIDTH / 2, HEIGHT - 1, "You");
+            } else if (mPos.equals(Tileset.WALL)) {
+                StdDraw.text(WIDTH / 2, HEIGHT - 1, "Wall");
+            } else if (mPos.equals(Tileset.FLOOR)) {
+                StdDraw.text(WIDTH / 2, HEIGHT - 1, "Floor");
+            } else if (mPos.equals(Tileset.FLOWER)) {
+                StdDraw.text(WIDTH / 2, HEIGHT - 1, "Flower");
+            } else {
+                StdDraw.text(WIDTH / 2, HEIGHT - 1, "Nothing");
+            }
+            StdDraw.show();
         }
-        else if (mPos.equals(Tileset.FLOOR)) {
-            ter.renderFrame(wg.getTeTile());
-            StdDraw.enableDoubleBuffering();
-            StdDraw.setPenColor(Color.white);
-            StdDraw.text(WIDTH / 2, HEIGHT, "Floor");
-        } else {
-            ter.renderFrame(wg.getTeTile());
-            StdDraw.enableDoubleBuffering();
-            StdDraw.setPenColor(Color.white);
-            StdDraw.text(WIDTH / 2, HEIGHT, "Nothing");
-        }
-        StdDraw.show();
     }
 
     private void save(String s) {
@@ -376,6 +399,7 @@ public class Engine {
             try {
                 FileInputStream fs = new FileInputStream(f);
                 ObjectInputStream os = new ObjectInputStream(fs);
+                System.out.println((String) os.readObject());
                 return (String) os.readObject();
             } catch (FileNotFoundException e) {
                 System.out.println("file not found");
