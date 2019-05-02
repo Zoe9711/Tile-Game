@@ -61,6 +61,7 @@ public class Engine {
                         case ('l'): {
                             System.out.print("case l");
                             String loadString = load();
+                            ter.initialize(WIDTH, HEIGHT);
                             renderTiles = interactWithInputString(loadString);
                             ter.renderFrame(renderTiles);
                             savedWorld += last;
@@ -75,30 +76,7 @@ public class Engine {
                         }
                     }
                 }
-/*
-                    System.out.println("gameRunning");
 
-                    WASD(last);
-                    int i = savedWorld.length() - 2;
-                    System.out.println("last: " + last);
-                    if (savedWorld.charAt(i) == ':' && (savedWorld.charAt(i + 1) == 'q'
-                            || savedWorld.charAt(i + 1) == 'Q')) {
-                        System.out.println("quit");
-                        String savedString = savedWorld.substring(0, savedWorld.length() - 3);
-                        save(savedString);
-                        drawCanvas();
-                        notification("Saved");
-                        StdDraw.pause(5000);
-                        gameRunning = false;
-                        System.exit(0);
-                    }
-
-                    tryGameOver(); // after your move -- for when player is next to enemy before moving to it
-
-                    tryGameOver(); //after their move -- for when player doesn't move or enemy reaches you first
-                    ter.renderFrame(newWorld.getTeTile());
-
-*/
              else if (seedInputRunning) {
                     if ((!Character.isDigit(last) && !last.equals('s')) || (!Character.isDigit(last) && !last.equals('S'))) {
                         warning();
@@ -119,7 +97,6 @@ public class Engine {
                     warning();
                     }
 
-
                 if (Character.isDigit(last)) {
                     savedWorld += last.toString();
                     seed += last.toString();
@@ -130,10 +107,10 @@ public class Engine {
 
                 last = new Character(' ');
 
+            }
         }
-    }
 
-}
+    }
 
     private void gameRunning() {
         while (gameRunning) {
@@ -205,10 +182,10 @@ public class Engine {
                 charArray.add(ch);
             }
 
+            int startIndexWASD = 0;
             if (charArray.get(0).equals('n') || charArray.get(0).equals('N')
                     || Character.isDigit(charArray.get(1))) {
                 String numbersToParse = "";
-                int startIndexWASD;
                 for (int i = 1; i < charArray.size(); i++) {
                     Character c = charArray.get(i);
                     if (!Character.isDigit(c)) {
@@ -228,18 +205,44 @@ public class Engine {
                 }
 
                 long seed = Long.valueOf(numbersToParse);
-//                for (int i = numbersToParse.length() - 1; i >= 0; i--) {
-//                    String c = Character.toString(numbersToParse.charAt(i));
-//                    seed += Integer.parseInt(c) * (int) Math.pow(10, i);
-//                }
 
-                //System.out.println(seed);
                 this.newWorld = new WorldGenerator(WIDTH, HEIGHT, seed);
                 finalWorldFrame = newWorld.getTeTile();
+                moveCharacters(startIndexWASD, charArray);
+
+
             }
+
+            if (charArray.get(0).equals('l') || charArray.get(0).equals('L')) {
+                String loadString = load();
+
+            }
+
+
         }
+
+
 //        ter.renderFrame(finalWorldFrame);
         return finalWorldFrame;
+    }
+
+
+    private void moveCharacters(int wasdIndex, ArrayList<Character> charArray) {
+        for (int i = wasdIndex; i < charArray.size(); i++) {
+            Character c = charArray.get(i);
+            WASD(c);
+            if (charArray.get(i) == ':' && (charArray.get(i + 1) == 'q'
+                    || charArray.get(i + 1) == 'Q')) {
+                System.out.println("quit");
+                String savedString = savedWorld.substring(0, savedWorld.length() - 3);
+                save(previousString + savedString);
+                drawCanvas();
+                notification("Saved");
+                StdDraw.pause(5000);
+                gameRunning = false;
+                System.exit(0);
+            }
+        }
     }
 
     private void WASD(Character key) {
@@ -397,7 +400,6 @@ public class Engine {
             try {
                 FileInputStream fs = new FileInputStream(f);
                 ObjectInputStream os = new ObjectInputStream(fs);
-                System.out.println((String) os.readObject());
                 return (String) os.readObject();
             } catch (FileNotFoundException e) {
                 System.out.println("file not found");
@@ -410,6 +412,7 @@ public class Engine {
                 System.exit(0);
             }
         }
+        System.exit(0);
         return "";
     }
 }
