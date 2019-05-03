@@ -32,7 +32,9 @@ public class Room implements Comparable, Serializable {
 //        this.endY = startY + height - 3;;
     }
 
-    public int getId() { return this.id; }
+//    public int getId() {
+//        return this.id;
+//    }
 
     public Position getPosition() {
         return this.p;
@@ -77,7 +79,7 @@ public class Room implements Comparable, Serializable {
         if (room.getClass().equals(this.getClass())) {
             return this.startX - ((Room) room).startX;
         } else {
-             return 0;
+            return 0;
         }
     }
 

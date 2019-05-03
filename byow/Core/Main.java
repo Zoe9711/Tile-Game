@@ -11,8 +11,10 @@ public class Main {
             System.exit(0);
         } else if (args.length == 1) {
             Engine engine = new Engine();
-            engine.interactWithInputString("n519788d0843569031643s");
-            //engine.interactWithInputString(args[0]);
+//            engine.interactWithInputString("n519788d0843569031643s");
+//            engine.interactWithInputString("n7193300625454684331saaawasdaawd:q");
+//            engine.interactWithInputString("lww:q");
+            engine.interactWithInputString(args[0]);
             System.out.println(engine.toString());
         } else {
             Engine engine = new Engine();

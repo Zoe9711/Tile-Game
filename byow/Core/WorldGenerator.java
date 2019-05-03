@@ -24,8 +24,9 @@ public class WorldGenerator implements Serializable {
     private LinkedList<Enemy> enemies;
     private HashMap<GameCharacter, Position> charToPositions;
     private WeightedDirectedGraph aStarGraph;
+    private TETile type;
 
-    public WorldGenerator(int w, int h, long seed) {
+    public WorldGenerator(int w, int h, long seed, TETile type) {
         this.width = w;
         this.height = h;
         this.seed = seed;
@@ -35,6 +36,7 @@ public class WorldGenerator implements Serializable {
         this.player = new Player(new Position(0, 0));
         this.enemies = new LinkedList<>();
         this.charToPositions = new HashMap<>();
+        this.type = type;
 
         this.world = new TETile[width][height];
         for (int x = 0; x < width; x += 1) {
@@ -50,12 +52,14 @@ public class WorldGenerator implements Serializable {
         this.aStarGraph = new WeightedDirectedGraph(this, w, h);
 
         addPlayers();
-        addEnemies();
+//        addEnemies();
     }
 
     public TETile[][] getTeTile() {
         return this.world;
     }
+
+//    public void setTeTile(TETile[][] world) { this.world = world; }
 
     public Position getPlayer() {
         return this.player.getPosition();
@@ -65,11 +69,11 @@ public class WorldGenerator implements Serializable {
         return this.player;
     }
 
-    public void setPlayer(Player newPlayer) {
-        this.player = newPlayer;
-    }
+//    public void setPlayer(Player newPlayer) {
+//        this.player = newPlayer;
+//    }
 
-    public LinkedList<Enemy> getEnemies() { return this.enemies; }
+//    public LinkedList<Enemy> getEnemies() { return this.enemies; }
 
     public int width() {
         return this.width;
@@ -94,7 +98,7 @@ public class WorldGenerator implements Serializable {
             this.roomGenerator.addRoom(this.world, new Position(posX, posY), w, h, i);
             j += 1;
         }
-        System.out.println("Rooms: " + j);
+//        System.out.println("Rooms: " + j);
         this.roomList = roomGenerator.getRoomList();
         this.roomMap = roomGenerator.getMap();
     }
@@ -114,7 +118,7 @@ public class WorldGenerator implements Serializable {
         Random random = new Random(seed());
         Room ranRm = roomList.get(random.nextInt(roomList.size()));
         Position playerP = ranRm.ranPosInRoom(random);
-        player.addOnMap(this.world, playerP);
+        player.addOnMap(this.world, playerP, this.type);
         this.player = new Player(playerP);
         this.charToPositions.put(this.player, playerP);
     }
@@ -130,7 +134,7 @@ public class WorldGenerator implements Serializable {
             if (!occupied.contains(enemyP) && !enemyP.equals(player.getPosition())) {
                 occupied.add(enemyP);
                 Enemy enemyToAdd = new Enemy(enemyP);
-                enemyToAdd.addOnMap(this.world, enemyP);
+                enemyToAdd.addOnMap(this.world, enemyP, Tileset.FLOWER);
                 this.enemies.add(enemyToAdd);
                 enemiesAddedCorrectly += 1;
                 this.charToPositions.put(enemyToAdd, enemyP);
@@ -144,7 +148,8 @@ public class WorldGenerator implements Serializable {
     // keep moving for about 3 or less spots before calling this method again
     public void moveEnemies() {
         for (Enemy enemy : enemies) {
-            System.out.println(enemy.getStartX() + ", " + enemy.getStartY() + " BEFORE ASTAR POSITION");
+            System.out.println(enemy.getStartX() + ", "
+                    + enemy.getStartY() + " BEFORE ASTAR POSITION");
             Position up = new Position(enemy.getStartX(), enemy.getStartY() + 1);
             Position down = new Position(enemy.getStartX(), enemy.getStartY() - 1);
             Position left = new Position(enemy.getStartX() - 1, enemy.getStartY());
@@ -167,7 +172,8 @@ public class WorldGenerator implements Serializable {
             // full of map's floors only and calculate nearest to player position
             HashMap<Position, Double> movesFour = new HashMap<>();
             for (Position p : wasdP) {
-                ShortestPathsSolver<Position> solver = new AStarSolver<>(aStarGraph, p, getPlayer(), 20);
+                ShortestPathsSolver<Position> solver =
+                        new AStarSolver<>(aStarGraph, p, getPlayer(), 20);
                 movesFour.put(p, solver.solutionWeight());
             }
 
@@ -181,7 +187,7 @@ public class WorldGenerator implements Serializable {
             }
             System.out.println(bestPos.x() + ", " + bestPos.y() + " AFTER ASTAR POSITION");
             this.charToPositions.put(enemy, bestPos);
-            enemy.move(world, enemy.getPosition(), bestPos, Tileset.FLOWER);
+            enemy.move(world, enemy.getPosition(), bestPos, Tileset.FLOWER, null);
             charToPositions.put(enemy, bestPos);
         }
     }

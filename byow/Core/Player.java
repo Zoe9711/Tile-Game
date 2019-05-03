@@ -9,6 +9,7 @@ public class Player implements Serializable, GameCharacter {
     private Position p;
     private int startX;
     private int startY;
+    private TETile type;
 
     public Player(Position p) {
         this.p = p;
@@ -42,22 +43,23 @@ public class Player implements Serializable, GameCharacter {
     }
 
     @Override
-    public void addOnMap(TETile[][] world, Position p) {
-        world[p.x()][p.y()] = Tileset.AVATAR;
-        this.p = p;
+    public void addOnMap(TETile[][] world, Position pn, TETile aType) {
+        world[pn.x()][pn.y()] = aType;
+        this.p = pn;
     }
 
     @Override
-    public void move(TETile[][] world, Position o, Position n, TETile t) {
+    public void move(TETile[][] world, Position o, Position n, TETile t, TETile aType) {
         if (t.equals(Tileset.FLOOR)) {
             world[o.x()][o.y()] = Tileset.FLOOR;
-            world[n.x()][n.y()] = Tileset.AVATAR;
+            world[n.x()][n.y()] = aType;
         }
 
         if (t.equals(Tileset.FLOWER)) {
             world[o.x()][o.y()] = Tileset.FLOOR;
             world[n.x()][n.y()] = Tileset.FLOWER;
         }
+
         this.p = n;
     }
 

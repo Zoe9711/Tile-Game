@@ -95,7 +95,8 @@ public class WeightedDirectedGraph implements AStarGraph<Position> {
 //            }
 //        }
 //        return estimate;
-        return Math.sqrt((p.x()-goal.x())*(p.x()-goal.x()) + (p.y()-goal.y())*(p.y()-goal.y()));
+        return Math.sqrt((p.x() - goal.x()) * (p.x()
+                - goal.x()) + (p.y() - goal.y()) * (p.y() - goal.y()));
     }
 
 

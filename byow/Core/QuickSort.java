@@ -2,8 +2,6 @@ package byow.Core;
 
 import edu.princeton.cs.algs4.Queue;
 
-import java.util.List;
-
 public class QuickSort {
     /**
      * Returns a new queue that contains the given queues catenated together.
