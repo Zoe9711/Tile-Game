@@ -71,7 +71,7 @@ public class Player implements Serializable, GameCharacter {
         }
 
         this.p = n;
+        this.startX = n.x();
+        this.startY = n.y();
     }
-
-
 }

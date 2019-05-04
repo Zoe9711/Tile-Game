@@ -11,9 +11,11 @@ public class Enemy implements Serializable, GameCharacter {
     private int startX;
     private int startY;
     private Position nextMove;
+    private int id;
 
-    public Enemy(Position p) {
+    public Enemy(Position p, int id) {
         this.p = p;
+        this.id = id;
     }
 
     @Override
@@ -55,9 +57,6 @@ public class Enemy implements Serializable, GameCharacter {
         this.p = n;
         this.startX = n.x();
         this.startY = n.y();
-     //   if (t.equals(Tileset.FLOWER)) {
-       //     world[n.x()][n.y()] = Tileset.AVATAR;
-        //}
     }
 
 

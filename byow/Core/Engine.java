@@ -211,10 +211,6 @@ public class Engine {
                         || savedWorld.charAt(i + 1) == 'Q')) {
                     System.out.println("quit");
 
-//                    System.out.println(savedWorld);
-//                    System.out.println(savedWorld.charAt(0));
-//                    System.out.println(load());
-
                     if (savedWorld.charAt(0) == 'l'
                             || savedWorld.charAt(0) == 'L') {
                         save(load() + savedWorld.substring(1, savedWorld.length() - 2));
@@ -311,6 +307,7 @@ public class Engine {
                 long seed = Long.valueOf(numbersToParse);
                 this.newWorld = new WorldGenerator(WIDTH, HEIGHT, seed, starterType);
                 finalWorldFrame = newWorld.getTeTile();
+                newWorld.moveEnemies();
 
                 ter.renderFrame(newWorld.getTeTile()); //ERASE
                 moveCharactersN(startIndexwasd + 1, charArray, input);
@@ -343,7 +340,6 @@ public class Engine {
                 save(nsStr.substring(0, nsStr.length() - 2)); //n###swasd
                 drawCanvas();
                 notification("Saved");
-                StdDraw.pause(2000);
                 System.exit(0);
             }
         }
@@ -363,7 +359,6 @@ public class Engine {
                 save(prev + savedString.substring(0, savedString.length() - 2));
                 drawCanvas();
                 notification("Saved");
-                StdDraw.pause(2000);
                 System.exit(0);
             }
         }
@@ -382,7 +377,20 @@ public class Engine {
                             newWorld.thePlayer().moveUp(
                                     newWorld.getTeTile(), newWorld.getPlayer()));
                 }
+                if (up.equals(Tileset.LOCKED_DOOR)) {
+                    newWorld.thePlayer().move(newWorld.getTeTile(),
+                            newWorld.getPlayer(),
+                            new Position(newWorld.getPlayer().x(), newWorld.getPlayer().y() + 1),
+                            Tileset.FLOOR, Tileset.AVATAR);
+                    newWorld.thePlayer().move(newWorld.getTeTile(),
+                            newWorld.getPlayer(),
+                            newWorld.getPortal(newWorld.getPlayer()).getOtherPortalPosition(),
+                            Tileset.FLOOR, Tileset.AVATAR);
+                    newWorld.removePortals();
+                    newWorld.addPortal();
+                }
                 savedWorld += key.toString();
+                newWorld.addAStep();
                 break;
             }
             case ('S'):
@@ -393,7 +401,20 @@ public class Engine {
                                     newWorld.getTeTile(), newWorld.getPlayer()));
 
                 }
+                if (down.equals(Tileset.LOCKED_DOOR)) {
+                    newWorld.thePlayer().move(newWorld.getTeTile(),
+                            newWorld.getPlayer(),
+                            new Position(newWorld.getPlayer().x(), newWorld.getPlayer().y() - 1),
+                            Tileset.FLOOR, Tileset.AVATAR);
+                    newWorld.thePlayer().move(newWorld.getTeTile(),
+                            newWorld.getPlayer(),
+                            newWorld.getPortal(newWorld.getPlayer()).getOtherPortalPosition(),
+                            Tileset.FLOOR, Tileset.AVATAR);
+                    newWorld.removePortals();
+                    newWorld.addPortal();
+                }
                 savedWorld += key.toString();
+                newWorld.addAStep();
                 break;
             }
             case ('A'):
@@ -404,7 +425,20 @@ public class Engine {
                                     newWorld.getTeTile(), newWorld.getPlayer()));
 
                 }
+                if (left.equals(Tileset.LOCKED_DOOR)) {
+                    newWorld.thePlayer().move(newWorld.getTeTile(),
+                            newWorld.getPlayer(),
+                            new Position(newWorld.getPlayer().x() - 1, newWorld.getPlayer().y()),
+                            Tileset.FLOOR, Tileset.AVATAR);
+                    newWorld.thePlayer().move(newWorld.getTeTile(),
+                            newWorld.getPlayer(),
+                            newWorld.getPortal(newWorld.getPlayer()).getOtherPortalPosition(),
+                            Tileset.FLOOR, Tileset.AVATAR);
+                    newWorld.removePortals();
+                    newWorld.addPortal();
+                }
                 savedWorld += key.toString();
+                newWorld.addAStep();
                 break;
             }
             case ('D'):
@@ -415,7 +449,21 @@ public class Engine {
                                     newWorld.getTeTile(), newWorld.getPlayer()));
 
                 }
+                if (right.equals(Tileset.LOCKED_DOOR)) {
+                    newWorld.thePlayer().move(newWorld.getTeTile(),
+                            newWorld.getPlayer(),
+                            new Position(newWorld.getPlayer().x() + 1, newWorld.getPlayer().y()),
+                            Tileset.FLOOR, Tileset.AVATAR);
+                    newWorld.thePlayer().move(newWorld.getTeTile(),
+                            newWorld.getPlayer(),
+                            newWorld.getPortal(newWorld.getPlayer()).getOtherPortalPosition(),
+                            Tileset.FLOOR, Tileset.AVATAR);
+                    newWorld.removePortals();
+                    newWorld.addPortal();
+                }
+
                 savedWorld += key.toString();
+                newWorld.addAStep();
                 break;
             }
             case (':'): {
@@ -431,6 +479,7 @@ public class Engine {
                 break;
             }
         }
+        StdDraw.pause(15);
 //        System.out.println("Player Location: (" +
 //        newWorld.getPlayer().x() + ", " + newWorld.getPlayer().y() + ")");
     }
@@ -531,6 +580,7 @@ public class Engine {
             } else {
                 StdDraw.text(WIDTH / 2, HEIGHT - 1, "Nothing");
             }
+            StdDraw.text(WIDTH / 1.5, HEIGHT - 1, "Steps taken: " + newWorld.getSteps());
             StdDraw.show();
         }
     }

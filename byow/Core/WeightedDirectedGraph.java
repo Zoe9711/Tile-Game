@@ -87,18 +87,8 @@ public class WeightedDirectedGraph implements AStarGraph<Position> {
      */
     @Override
     public double estimatedDistanceToGoal(Position p, Position goal) {
-//        List<WeightedEdge<Position>> edges = neighbors(p);
-//        double estimate = Double.POSITIVE_INFINITY;
-//        for (WeightedEdge<Position> e : edges) {
-//            if (e.weight() < estimate) {
-//                estimate = e.weight();
-//            }
-//        }
-//        return estimate;
         return Math.sqrt((p.x() - goal.x()) * (p.x()
                 - goal.x()) + (p.y() - goal.y()) * (p.y() - goal.y()));
     }
-
-
 
 }

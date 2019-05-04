@@ -59,5 +59,17 @@ public class Portal implements Serializable, GameCharacter {
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        // If the object is compared with itself then return true
+        if (o == this) {
+            return true;
+        }
+
+        Portal c = (Portal) o;
+
+        return this.getPosition().equals(c.getPosition());
+    }
+
 
 }

@@ -26,6 +26,8 @@ public class WorldGenerator implements Serializable {
     private HashMap<GameCharacter, Position> charToPositions;
     private WeightedDirectedGraph aStarGraph;
     private TETile type;
+    private Random portalRand;
+    private Integer steps;
 
     public WorldGenerator(int w, int h, long seed, TETile type) {
         this.width = w;
@@ -39,6 +41,8 @@ public class WorldGenerator implements Serializable {
         this.charToPositions = new HashMap<>();
         this.type = type;
         this.portals = new LinkedList<>();
+        this.portalRand = new Random(seed + 1);
+        this.steps = 0;
 
         this.world = new TETile[width][height];
         for (int x = 0; x < width; x += 1) {
@@ -54,12 +58,16 @@ public class WorldGenerator implements Serializable {
         this.aStarGraph = new WeightedDirectedGraph(this, w, h);
 
         addPlayers();
-        addEnemies();
+        addEnemies(4);
         addPortal();
     }
 
-    public LinkedList<Portal> getPortals() {
-        return this.portals;
+    public void addAStep() {
+        this.steps += 1;
+    }
+
+    public String getSteps() {
+        return this.steps.toString();
     }
 
     public void setPortals(LinkedList<Portal> portals) { this.portals = portals; }
@@ -96,8 +104,26 @@ public class WorldGenerator implements Serializable {
         return this.seed;
     }
 
+    public Portal getPortal(Position n) {
+        return portals.get(portalIndex(n));
+    }
+
+    private int portalIndex(Position n) {
+        if (portals.get(0).equals(new Portal(n))) {
+            return 0;
+        }
+        return 1;
+    }
+
+    public void removePortals() {
+        this.portals.clear();
+    }
+
+    public LinkedList<Portal> getPortals() {
+        return this.portals;
+    }
+
     public void addPortal() {
-        Random random = new Random(seed() + 1); //randomize seed relatively
         ArrayList<Position> occupied = new ArrayList<>();
         occupied.add(getPlayer());
         for (Enemy e : enemies) {
@@ -105,8 +131,8 @@ public class WorldGenerator implements Serializable {
         }
         int portalsAddedCorrectly = 0;
         while (portalsAddedCorrectly != 2) {
-            Room ranRm = roomList.get(random.nextInt(roomList.size()));
-            Position portalP = ranRm.ranPosInRoom(random);
+            Room ranRm = roomList.get(portalRand.nextInt(roomList.size()));
+            Position portalP = ranRm.ranPosInRoom(portalRand);
             if (!occupied.contains(portalP)) {
                 Portal portalToAdd = new Portal(portalP);
                 portalToAdd.addOnMap(this.world, portalP, null);
@@ -116,6 +142,12 @@ public class WorldGenerator implements Serializable {
                 portalsAddedCorrectly += 1;
             }
         }
+
+        Portal p1 = portals.get(0);
+        Portal p2 = portals.get(1);
+        p1.setOtherPortalPosition(p2.getPosition());
+        p2.setOtherPortalPosition(p1.getPosition());
+
     }
 
     public void addRooms(int numOfRoom) {
@@ -154,17 +186,17 @@ public class WorldGenerator implements Serializable {
         this.charToPositions.put(this.player, playerP);
     }
 
-    public void addEnemies() {
+    public void addEnemies(int amt) {
         Random random = new Random(seed());
         random.nextInt(); //get rid of player's place
         ArrayList<Position> occupied = new ArrayList<>();
         int enemiesAddedCorrectly = 0;
-        while (enemiesAddedCorrectly != 4) {
+        while (enemiesAddedCorrectly != amt) {
             Room ranRm = roomList.get(random.nextInt(roomList.size()));
             Position enemyP = ranRm.ranPosInRoom(random);
             if (!occupied.contains(enemyP) && !enemyP.equals(player.getPosition())) {
                 occupied.add(enemyP);
-                Enemy enemyToAdd = new Enemy(enemyP);
+                Enemy enemyToAdd = new Enemy(enemyP, enemiesAddedCorrectly);
                 enemyToAdd.addOnMap(this.world, enemyP, Tileset.FLOWER);
                 this.enemies.add(enemyToAdd);
                 enemiesAddedCorrectly += 1;
