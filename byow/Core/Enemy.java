@@ -45,9 +45,9 @@ public class Enemy implements Serializable, GameCharacter {
         this.p = n;
         this.startX = n.x();
         this.startY = n.y();
-//        if (t.equals(Tileset.FLOWER)) {
-//            world[n.x()][n.y()] = Tileset.AVATAR;
-//        }
+     //   if (t.equals(Tileset.FLOWER)) {
+       //     world[n.x()][n.y()] = Tileset.AVATAR;
+        //}
     }
 
 

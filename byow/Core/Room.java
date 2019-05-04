@@ -16,8 +16,8 @@ public class Room implements Comparable, Serializable {
     private int startX;
     private int startY;
     private int id;
-//    private int endX;
-//    private int endY;
+    private int endX;
+    private int endY;
 
     public Room(Position p, int w, int h, int id) {
         this.p = p;
@@ -27,14 +27,14 @@ public class Room implements Comparable, Serializable {
 
         this.startX = p.x();
         this.startY = p.y();
-//        this.endX = startX + width + 3;
-//        this.startY = p.y() + 1;
-//        this.endY = startY + height - 3;;
+        this.endX = startX + width + 3;
+        this.startY = p.y() + 1;
+        this.endY = startY + height - 3;;
     }
 
-//    public int getId() {
-//        return this.id;
-//    }
+    public int getId() {
+        return this.id;
+    }
 
     public Position getPosition() {
         return this.p;

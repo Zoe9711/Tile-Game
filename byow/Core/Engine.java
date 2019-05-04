@@ -22,6 +22,7 @@ public class Engine {
     private boolean seedInputRunning = false;
     private boolean menuRunning = true;
     private boolean playerMenuRunning = false;
+    private boolean loreRunning = false;
     private WorldGenerator newWorld;
     TETile[][] renderTiles = null;
     private TETile starterType = Tileset.AVATAR;
@@ -49,7 +50,11 @@ public class Engine {
                 } else if (playerMenuRunning) {
                     playerMenuRunning(last);
 
-                } else if (seedInputRunning) {
+                } else if (loreRunning) {
+                    loreRunning(last);
+                }
+
+                else if (seedInputRunning) {
                     if ((!Character.isDigit(last) && !last.equals('s'))
                             || (!Character.isDigit(last) && !last.equals('S'))) {
                         warning();
@@ -121,12 +126,34 @@ public class Engine {
                 menuRunning = false;
                 break;
             }
+            case ('g'):
+            case ('G'): {
+                lore();
+                loreRunning = true;
+                menuRunning = false;
+                break;
+            }
+
             default: {
                 //do nothing
                 break;
             }
         }
     }
+
+    private void loreRunning(Character last) {
+        switch (last) {
+            case ('h'):
+            case('H'):{
+                drawCanvas();
+                drawMenu();
+                menuRunning = true;
+                loreRunning = false;
+                break;
+            }
+        }
+    }
+
 
     private void playerMenuRunning(Character last) {
         switch (last) {
@@ -197,18 +224,18 @@ public class Engine {
                         save(savedWorld.substring(0, savedWorld.length() - 2));
                     }
 
-//                    drawCanvas();
-//                    notification("Saved");
-//                    StdDraw.pause(5000);
+                    drawCanvas();
+                    notification("Saved");
+                    StdDraw.pause(2000);
                     gameRunning = false;
-//                    System.exit(0);
+                    System.exit(0);
                 }
 
-//  //after your move -- for when player is next to enemy before moving to it
-//                tryGameOver();
-//                newWorld.moveEnemies();
+  //after your move -- for when player is next to enemy before moving to it
+                tryGameOver();
+                newWorld.moveEnemies();
 //  //after their move -- for when player doesn't move or enemy reaches you first
-//                tryGameOver();
+                tryGameOver();
                 ter.renderFrame(newWorld.getTeTile());
             }
         }
@@ -243,7 +270,7 @@ public class Engine {
         // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
         // that works for many different input types.
 
-//        ter.initialize(WIDTH, HEIGHT); //ERASE
+        ter.initialize(WIDTH, HEIGHT); //ERASE
         TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
         for (int x = 0; x < WIDTH; x += 1) {
             for (int y = 0; y < HEIGHT; y += 1) {
@@ -282,7 +309,7 @@ public class Engine {
                 this.newWorld = new WorldGenerator(WIDTH, HEIGHT, seed, starterType);
                 finalWorldFrame = newWorld.getTeTile();
 
-                //ter.renderFrame(newWorld.getTeTile()); //ERASE
+                ter.renderFrame(newWorld.getTeTile()); //ERASE
                 moveCharactersN(startIndexwasd, charArray, input);
             }
 
@@ -290,14 +317,14 @@ public class Engine {
                 String loadString = load();
                 System.out.println("LoadString: " + loadString);
                 finalWorldFrame = interactWithInputString(loadString);
-                //ter.renderFrame(newWorld.getTeTile()); //ERASE
+                ter.renderFrame(newWorld.getTeTile()); //ERASE
                 moveCharactersL(loadString, 1, charArray);
 
             }
         }
 
 
-   //     ter.renderFrame(finalWorldFrame); //ERASE
+        ter.renderFrame(finalWorldFrame); //ERASE
         return finalWorldFrame;
     }
 
@@ -306,15 +333,15 @@ public class Engine {
         for (int i = wasdIndex; i < charArray.size(); i++) {
             Character c = charArray.get(i);
             wasd(c);
-//            newWorld.moveEnemies();
-            //ter.renderFrame(newWorld.getTeTile()); //ERASE
+            newWorld.moveEnemies();
+            ter.renderFrame(newWorld.getTeTile()); //ERASE
             if (charArray.get(i - 1) == ':' && (charArray.get(i) == 'q'
                     || charArray.get(i + 1) == 'Q')) {
                 save(nsStr.substring(0, nsStr.length() - 2)); //n###swasd
-//                drawCanvas();
-//                notification("Saved");
-//                StdDraw.pause(5000);
-//                System.exit(0);
+                drawCanvas();
+                notification("Saved");
+                StdDraw.pause(2000);
+                System.exit(0);
             }
         }
     }
@@ -326,15 +353,15 @@ public class Engine {
             Character c = charArray.get(i);
             savedString += c.toString();
             wasd(c);
-//            newWorld.moveEnemies();
-            //ter.renderFrame(newWorld.getTeTile()); //ERASE
+            newWorld.moveEnemies();
+            ter.renderFrame(newWorld.getTeTile()); //ERASE
             if (charArray.get(i - 1) == ':' && (charArray.get(i) == 'q'
                     || charArray.get(i + 1) == 'Q')) {
                 save(prev + savedString.substring(0, savedString.length() - 2));
-//                drawCanvas();
-//                notification("Saved");
-//                StdDraw.pause(5000);
-//                System.exit(0);
+                drawCanvas();
+                notification("Saved");
+                StdDraw.pause(2000);
+                System.exit(0);
             }
         }
     }
@@ -409,18 +436,18 @@ public class Engine {
     private void tryGameOver() {
         if (newWorld.isPlayerKilled()) {
             System.out.print("I'm just a humble farmer.");
-//            System.exit(0); //placeholder for now
+            System.exit(0); //placeholder for now
         }
     }
 
-//    private void notification(String s) {
-//        StdDraw.clear(Color.BLACK);
-//        Font title = new Font("Times New Roman", Font.BOLD, 40);
-//        StdDraw.setFont(title);
-//        StdDraw.setPenColor(Color.WHITE);
-//        StdDraw.text(MWIDTH / 2, MHEIGHT / 2, s);
-//        StdDraw.show();
-//    }
+    private void notification(String s) {
+        StdDraw.clear(Color.BLACK);
+        Font title = new Font("Times New Roman", Font.BOLD, 40);
+        StdDraw.setFont(title);
+        StdDraw.setPenColor(Color.WHITE);
+        StdDraw.text(MWIDTH / 2, MHEIGHT / 2, s);
+        StdDraw.show();
+    }
 
     private void warning() {
         StdDraw.clear(Color.BLACK);
@@ -440,6 +467,7 @@ public class Engine {
         StdDraw.text(MWIDTH / 2, MHEIGHT * 2 / 5, "Load Game (L)");
         StdDraw.text(MWIDTH / 2, MHEIGHT * 3 / 10, "Quit (Q)");
         StdDraw.text(MWIDTH / 2, MHEIGHT * 2 / 10, "Change Type (P)");
+        StdDraw.text(MWIDTH / 2, MHEIGHT * 1 / 10, "The Story (G)");
         StdDraw.show();
     }
 
@@ -448,6 +476,18 @@ public class Engine {
         StdDraw.text(MWIDTH / 2, MHEIGHT / 2, "Input: " + seed);
         StdDraw.show();
     }
+
+    private void lore() {
+        StdDraw.clear(Color.BLACK);
+        StdDraw.text(MWIDTH / 2, MHEIGHT * 7 / 10, "You will be chased by flowers (yes they're alive)");
+        StdDraw.text(MWIDTH / 2, MHEIGHT * 6 / 10, "Fragrant and beautiful");
+        StdDraw.text(MWIDTH / 2, MHEIGHT * 5 / 10, "Poisonous and dangerous");
+        StdDraw.text(MWIDTH / 2, MHEIGHT * 4 / 10, "Try to survive");
+        StdDraw.text(MWIDTH / 2, MHEIGHT * 3 / 10, "Though you hardly will");
+        StdDraw.text(MWIDTH / 2, MHEIGHT * 2 / 10, "May the force be with you (H)");
+        StdDraw.show();
+    }
+
     private void playerMenu() {
         StdDraw.clear(Color.BLACK);
         StdDraw.text(MWIDTH / 2, MHEIGHT * 7 / 10, "Grass (G)");
@@ -502,10 +542,10 @@ public class Engine {
             os.writeObject(s);
         }  catch (FileNotFoundException e) {
             System.out.println("file not found");
-//            System.exit(0);
+            System.exit(0);
         } catch (IOException e) {
             System.out.println(e);
-//            System.exit(0);
+            System.exit(0);
         }
     }
 
@@ -518,16 +558,16 @@ public class Engine {
                 return (String) os.readObject();
             } catch (FileNotFoundException e) {
                 System.out.println("file not found");
-//                System.exit(0);
+                System.exit(0);
             } catch (IOException e) {
                 System.out.println(e);
-//                System.exit(0);
+                System.exit(0);
             } catch (ClassNotFoundException e) {
                 System.out.println("class not found");
-//                System.exit(0);
+                System.exit(0);
             }
         }
-//        System.exit(0);
+        System.exit(0);
         return "";
     }
 }

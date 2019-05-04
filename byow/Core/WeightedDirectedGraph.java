@@ -45,14 +45,14 @@ public class WeightedDirectedGraph implements AStarGraph<Position> {
     }
 
     private ArrayList<EdgeList> adj;
-//    public HashMap<Position, Integer> mapping;
+    public HashMap<Position, Integer> mapping;
     private ArrayList<Position> mapping1;
     private ArrayList<Integer> mapping2;
     private WorldGenerator world;
 
 
     public WeightedDirectedGraph(WorldGenerator w, int width, int height) {
-//        mapping = new HashMap<>();
+        mapping = new HashMap<>();
         mapping1 = new ArrayList<>();
         mapping2 = new ArrayList<>();
 
@@ -65,7 +65,7 @@ public class WeightedDirectedGraph implements AStarGraph<Position> {
                     Position pos = new Position(i, j);
                     EdgeList vertex = new EdgeList(pos);
                     adj.add(vertex);
-//                    mapping.put(pos, index);
+                    mapping.put(pos, index);
                     mapping1.add(pos);
                     mapping2.add(index);
                     index += 1;

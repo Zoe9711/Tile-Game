@@ -52,14 +52,14 @@ public class WorldGenerator implements Serializable {
         this.aStarGraph = new WeightedDirectedGraph(this, w, h);
 
         addPlayers();
-//        addEnemies();
+        addEnemies();
     }
 
     public TETile[][] getTeTile() {
         return this.world;
     }
 
-//    public void setTeTile(TETile[][] world) { this.world = world; }
+    public void setTeTile(TETile[][] world) { this.world = world; }
 
     public Position getPlayer() {
         return this.player.getPosition();
@@ -69,11 +69,11 @@ public class WorldGenerator implements Serializable {
         return this.player;
     }
 
-//    public void setPlayer(Player newPlayer) {
-//        this.player = newPlayer;
-//    }
+    public void setPlayer(Player newPlayer) {
+        this.player = newPlayer;
+    }
 
-//    public LinkedList<Enemy> getEnemies() { return this.enemies; }
+    public LinkedList<Enemy> getEnemies() { return this.enemies; }
 
     public int width() {
         return this.width;
