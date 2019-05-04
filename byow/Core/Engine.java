@@ -67,6 +67,7 @@ public class Engine {
                         ter.initialize(WIDTH, HEIGHT);
                         System.out.println(savedWorld);
                         this.renderTiles = interactWithInputString(savedWorld);
+                        newWorld.moveEnemies();
                         ter.renderFrame(renderTiles);
                         seedInputRunning = false;
                         gameRunning = true;
@@ -202,21 +203,21 @@ public class Engine {
             if (StdDraw.hasNextKeyTyped()) {
                 Character last = StdDraw.nextKeyTyped();
                 wasd(last);
-                System.out.println("Gamerunning: " + savedWorld);
+//                System.out.println("Gamerunning: " + savedWorld);
                 int i = savedWorld.length() - 2;
                 System.out.println("last: " + last);
+
                 if (savedWorld.charAt(i) == ':' && (savedWorld.charAt(i + 1) == 'q'
                         || savedWorld.charAt(i + 1) == 'Q')) {
                     System.out.println("quit");
 
-                    System.out.println(savedWorld);
-                    System.out.println(savedWorld.charAt(0));
-                    System.out.println(load());
+//                    System.out.println(savedWorld);
+//                    System.out.println(savedWorld.charAt(0));
+//                    System.out.println(load());
 
                     if (savedWorld.charAt(0) == 'l'
                             || savedWorld.charAt(0) == 'L') {
                         save(load() + savedWorld.substring(1, savedWorld.length() - 2));
-
                     }
 
                     if (savedWorld.charAt(0) == 'n'
@@ -233,8 +234,10 @@ public class Engine {
 
   //after your move -- for when player is next to enemy before moving to it
                 tryGameOver();
-                newWorld.moveEnemies();
-//  //after their move -- for when player doesn't move or enemy reaches you first
+                if (last != ':') {
+                    newWorld.moveEnemies();
+                }
+  //after their move -- for when player doesn't move or enemy reaches you first
                 tryGameOver();
                 ter.renderFrame(newWorld.getTeTile());
             }
@@ -310,7 +313,7 @@ public class Engine {
                 finalWorldFrame = newWorld.getTeTile();
 
                 ter.renderFrame(newWorld.getTeTile()); //ERASE
-                moveCharactersN(startIndexwasd, charArray, input);
+                moveCharactersN(startIndexwasd + 1, charArray, input);
             }
 
             if (charArray.get(0).equals('l') || charArray.get(0).equals('L')) {
@@ -378,7 +381,6 @@ public class Engine {
                     newWorld.thePlayer().setNewPosition(
                             newWorld.thePlayer().moveUp(
                                     newWorld.getTeTile(), newWorld.getPlayer()));
-
                 }
                 savedWorld += key.toString();
                 break;
@@ -435,7 +437,7 @@ public class Engine {
 
     private void tryGameOver() {
         if (newWorld.isPlayerKilled()) {
-            System.out.print("I'm just a humble farmer.");
+            System.out.print("I'm just a humble flower farmer.");
             System.exit(0); //placeholder for now
         }
     }
@@ -454,7 +456,6 @@ public class Engine {
         StdDraw.text(MWIDTH / 2, MHEIGHT / 2, "Put a number");
         StdDraw.show();
     }
-
 
     private void drawMenu() {
         Font title = new Font("Times New Roman", Font.BOLD, 40);
@@ -513,6 +514,7 @@ public class Engine {
         StdDraw.clear(Color.BLACK);
         if ((int) StdDraw.mouseX() < WIDTH && (int) StdDraw.mouseY() < HEIGHT) {
             TETile mPos = wg.getTeTile()[(int) StdDraw.mouseX()][(int) StdDraw.mouseY()];
+            Position p = new Position((int) StdDraw.mouseX(), (int) StdDraw.mouseY());
             ter.renderFrame(newWorld.getTeTile());
             StdDraw.enableDoubleBuffering();
             StdDraw.setPenColor(Color.white);
@@ -524,10 +526,24 @@ public class Engine {
                 StdDraw.text(WIDTH / 2, HEIGHT - 1, "Floor");
             } else if (mPos.equals(Tileset.FLOWER)) {
                 StdDraw.text(WIDTH / 2, HEIGHT - 1, "Flower");
+                Enemy enemy = newWorld.getEnemyAt(p);
+                StdDraw.text(WIDTH / 6, HEIGHT - 1, "Enemy's Next Move: " + convertToString(enemy, enemy.getNextMove()));
             } else {
                 StdDraw.text(WIDTH / 2, HEIGHT - 1, "Nothing");
             }
             StdDraw.show();
+        }
+    }
+
+    private String convertToString(Enemy e, Position n) {
+        if (n.y() > e.getPosition().y()) {
+            return "Up";
+        } else if (n.y() < e.getPosition().y()) {
+            return "Down";
+        } else if (n.x() > e.getPosition().x()) {
+            return "Right";
+        } else {
+            return "Left";
         }
     }
 

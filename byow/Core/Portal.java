@@ -1,18 +1,19 @@
 package byow.Core;
 
-
+import byow.Core.GameCharacter;
+import byow.Core.Position;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
 import java.io.Serializable;
 
-public class Enemy implements Serializable, GameCharacter {
+public class Portal implements Serializable, GameCharacter {
     private Position p;
     private int startX;
     private int startY;
-    private Position nextMove;
+    private Position otherPortalPosition;
 
-    public Enemy(Position p) {
+    public Portal(Position p) {
         this.p = p;
     }
 
@@ -21,12 +22,18 @@ public class Enemy implements Serializable, GameCharacter {
         return this.p;
     }
 
-    public Position getNextMove() {
-        return this.nextMove;
+    public Position getOtherPortalPosition() {
+        return this.otherPortalPosition;
     }
 
-    public void setNextMove(Position next) {
-        this.nextMove = next;
+    public void setOtherPortalPosition(Position n) {
+        this.otherPortalPosition = n;
+    }
+
+    public void setNewPosition(Position n) {
+        this.p = n;
+        this.startX = n.x();
+        this.startY = n.y();
     }
 
     @Override
@@ -41,23 +48,15 @@ public class Enemy implements Serializable, GameCharacter {
 
     @Override
     public void addOnMap(TETile[][] world, Position pn, TETile type) {
-        world[pn.x()][pn.y()] = type;
+        world[pn.x()][pn.y()] = Tileset.LOCKED_DOOR;
         this.p = pn;
         this.startX = pn.x();
         this.startY = pn.y();
-        this.nextMove = pn;
     }
 
     @Override
     public void move(TETile[][] world, Position o, Position n, TETile t, TETile type) {
-        world[o.x()][o.y()] = Tileset.NOTHING;
-        world[n.x()][n.y()] = Tileset.FLOWER;
-        this.p = n;
-        this.startX = n.x();
-        this.startY = n.y();
-     //   if (t.equals(Tileset.FLOWER)) {
-       //     world[n.x()][n.y()] = Tileset.AVATAR;
-        //}
+
     }
 
 
