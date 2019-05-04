@@ -28,6 +28,7 @@ public class WorldGenerator implements Serializable {
     private TETile type;
     private Random portalRand;
     private Integer steps;
+    private int portalNum;
 
     public WorldGenerator(int w, int h, long seed, TETile type) {
         this.width = w;
@@ -43,6 +44,7 @@ public class WorldGenerator implements Serializable {
         this.portals = new LinkedList<>();
         this.portalRand = new Random(seed + 1);
         this.steps = 0;
+        this.portalNum = 0;
 
         this.world = new TETile[width][height];
         for (int x = 0; x < width; x += 1) {
@@ -59,7 +61,7 @@ public class WorldGenerator implements Serializable {
 
         addPlayers();
         addEnemies(4);
-        addPortal();
+        addPortals(5);
     }
 
     public void addAStep() {
@@ -104,33 +106,43 @@ public class WorldGenerator implements Serializable {
         return this.seed;
     }
 
-    public Portal getPortal(Position n) {
-        return portals.get(portalIndex(n));
+    public Portal getOtherRandomPortal(Portal curr) {
+        Integer randomIndex = portalIndex(curr.getPosition());
+        while (randomIndex.equals(portalIndex(curr.getPosition()))) {
+            randomIndex = portalRand.nextInt(portalNum);
+        }
+        return portals.get(randomIndex);
     }
 
     private int portalIndex(Position n) {
-        if (portals.get(0).equals(new Portal(n))) {
-            return 0;
+        int i = 0;
+        for (Portal p : portals) {
+            if (p.equals(new Portal(n))) {
+                return i;
+            }
+            i += 1;
         }
-        return 1;
+        return 0;
     }
 
-    public void removePortals() {
+    public void removePortals(Position avatarFinalPos) {
+        for (Portal p : portals) {
+            if (p.getPosition() != avatarFinalPos) {
+                world[p.getStartX()][p.getStartY()] = Tileset.FLOOR;
+            }
+        }
         this.portals.clear();
     }
 
-    public LinkedList<Portal> getPortals() {
-        return this.portals;
-    }
-
-    public void addPortal() {
+    public void addPortals(int number) {
+        this.portalNum = number;
         ArrayList<Position> occupied = new ArrayList<>();
         occupied.add(getPlayer());
         for (Enemy e : enemies) {
             occupied.add(e.getPosition());
         }
         int portalsAddedCorrectly = 0;
-        while (portalsAddedCorrectly != 2) {
+        while (portalsAddedCorrectly != number) {
             Room ranRm = roomList.get(portalRand.nextInt(roomList.size()));
             Position portalP = ranRm.ranPosInRoom(portalRand);
             if (!occupied.contains(portalP)) {
@@ -142,12 +154,6 @@ public class WorldGenerator implements Serializable {
                 portalsAddedCorrectly += 1;
             }
         }
-
-        Portal p1 = portals.get(0);
-        Portal p2 = portals.get(1);
-        p1.setOtherPortalPosition(p2.getPosition());
-        p2.setOtherPortalPosition(p1.getPosition());
-
     }
 
     public void addRooms(int numOfRoom) {

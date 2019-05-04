@@ -67,7 +67,7 @@ public class Engine {
                         ter.initialize(WIDTH, HEIGHT);
                         System.out.println(savedWorld);
                         this.renderTiles = interactWithInputString(savedWorld);
-                        newWorld.moveEnemies();
+//                        newWorld.moveEnemies();
                         ter.renderFrame(renderTiles);
                         seedInputRunning = false;
                         gameRunning = true;
@@ -378,16 +378,7 @@ public class Engine {
                                     newWorld.getTeTile(), newWorld.getPlayer()));
                 }
                 if (up.equals(Tileset.LOCKED_DOOR)) {
-                    newWorld.thePlayer().move(newWorld.getTeTile(),
-                            newWorld.getPlayer(),
-                            new Position(newWorld.getPlayer().x(), newWorld.getPlayer().y() + 1),
-                            Tileset.FLOOR, Tileset.AVATAR);
-                    newWorld.thePlayer().move(newWorld.getTeTile(),
-                            newWorld.getPlayer(),
-                            newWorld.getPortal(newWorld.getPlayer()).getOtherPortalPosition(),
-                            Tileset.FLOOR, Tileset.AVATAR);
-                    newWorld.removePortals();
-                    newWorld.addPortal();
+                    portalProcess(new Position(newWorld.getPlayer().x(), newWorld.getPlayer().y() + 1));
                 }
                 savedWorld += key.toString();
                 newWorld.addAStep();
@@ -402,16 +393,7 @@ public class Engine {
 
                 }
                 if (down.equals(Tileset.LOCKED_DOOR)) {
-                    newWorld.thePlayer().move(newWorld.getTeTile(),
-                            newWorld.getPlayer(),
-                            new Position(newWorld.getPlayer().x(), newWorld.getPlayer().y() - 1),
-                            Tileset.FLOOR, Tileset.AVATAR);
-                    newWorld.thePlayer().move(newWorld.getTeTile(),
-                            newWorld.getPlayer(),
-                            newWorld.getPortal(newWorld.getPlayer()).getOtherPortalPosition(),
-                            Tileset.FLOOR, Tileset.AVATAR);
-                    newWorld.removePortals();
-                    newWorld.addPortal();
+                    portalProcess(new Position(newWorld.getPlayer().x(), newWorld.getPlayer().y() - 1));
                 }
                 savedWorld += key.toString();
                 newWorld.addAStep();
@@ -426,16 +408,7 @@ public class Engine {
 
                 }
                 if (left.equals(Tileset.LOCKED_DOOR)) {
-                    newWorld.thePlayer().move(newWorld.getTeTile(),
-                            newWorld.getPlayer(),
-                            new Position(newWorld.getPlayer().x() - 1, newWorld.getPlayer().y()),
-                            Tileset.FLOOR, Tileset.AVATAR);
-                    newWorld.thePlayer().move(newWorld.getTeTile(),
-                            newWorld.getPlayer(),
-                            newWorld.getPortal(newWorld.getPlayer()).getOtherPortalPosition(),
-                            Tileset.FLOOR, Tileset.AVATAR);
-                    newWorld.removePortals();
-                    newWorld.addPortal();
+                    portalProcess(new Position(newWorld.getPlayer().x() - 1, newWorld.getPlayer().y()));
                 }
                 savedWorld += key.toString();
                 newWorld.addAStep();
@@ -450,16 +423,7 @@ public class Engine {
 
                 }
                 if (right.equals(Tileset.LOCKED_DOOR)) {
-                    newWorld.thePlayer().move(newWorld.getTeTile(),
-                            newWorld.getPlayer(),
-                            new Position(newWorld.getPlayer().x() + 1, newWorld.getPlayer().y()),
-                            Tileset.FLOOR, Tileset.AVATAR);
-                    newWorld.thePlayer().move(newWorld.getTeTile(),
-                            newWorld.getPlayer(),
-                            newWorld.getPortal(newWorld.getPlayer()).getOtherPortalPosition(),
-                            Tileset.FLOOR, Tileset.AVATAR);
-                    newWorld.removePortals();
-                    newWorld.addPortal();
+                    portalProcess(new Position(newWorld.getPlayer().x() + 1, newWorld.getPlayer().y()));
                 }
 
                 savedWorld += key.toString();
@@ -482,6 +446,19 @@ public class Engine {
         StdDraw.pause(15);
 //        System.out.println("Player Location: (" +
 //        newWorld.getPlayer().x() + ", " + newWorld.getPlayer().y() + ")");
+    }
+
+    //n is the WASD next movement
+    private void portalProcess(Position n) {
+        //goes to portal, portal disappears
+        newWorld.thePlayer().move(newWorld.getTeTile(), newWorld.getPlayer(), n,
+                Tileset.FLOOR, Tileset.AVATAR);
+        //goes to random portal, deletes avatar in prev place
+        newWorld.thePlayer().move(newWorld.getTeTile(), newWorld.getPlayer(),
+                newWorld.getOtherRandomPortal(new Portal(newWorld.getPlayer())).getPosition(),
+                Tileset.FLOOR, Tileset.AVATAR);
+        newWorld.removePortals(newWorld.getPlayer());
+        newWorld.addPortals(5);
     }
 
     private void tryGameOver() {

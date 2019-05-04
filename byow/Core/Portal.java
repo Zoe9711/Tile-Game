@@ -11,7 +11,6 @@ public class Portal implements Serializable, GameCharacter {
     private Position p;
     private int startX;
     private int startY;
-    private Position otherPortalPosition;
 
     public Portal(Position p) {
         this.p = p;
@@ -20,14 +19,6 @@ public class Portal implements Serializable, GameCharacter {
     @Override
     public Position getPosition() {
         return this.p;
-    }
-
-    public Position getOtherPortalPosition() {
-        return this.otherPortalPosition;
-    }
-
-    public void setOtherPortalPosition(Position n) {
-        this.otherPortalPosition = n;
     }
 
     public void setNewPosition(Position n) {
