@@ -10,14 +10,16 @@ public class Player implements Serializable, GameCharacter {
     private int startX;
     private int startY;
     private TETile type;
+    private Position prevPos;
 
     public Player(Position p) {
         this.p = p;
         this.startX = p.x();
         this.startY = p.y();
+        this.prevPos = p;
 //        this.endX = startX + width + 3;
 //        this.startY = p.y() + 1;
-//        this.endY = startY + height - 3;;
+//        this.endY = startY + height - 3;
     }
 
     @Override
@@ -30,6 +32,14 @@ public class Player implements Serializable, GameCharacter {
         this.p = np;
         this.startX = np.x();
         this.startY = np.y();
+    }
+
+    public Position getPrevPos() {
+        return this.prevPos;
+    }
+
+    public void setPrevPos(Position np) {
+        this.prevPos = np;
     }
 
     @Override
@@ -61,7 +71,7 @@ public class Player implements Serializable, GameCharacter {
         }
 
         this.p = n;
+        this.startX = n.x();
+        this.startY = n.y();
     }
-
-
 }

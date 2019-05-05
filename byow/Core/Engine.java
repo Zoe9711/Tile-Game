@@ -67,6 +67,7 @@ public class Engine {
                         ter.initialize(WIDTH, HEIGHT);
                         System.out.println(savedWorld);
                         this.renderTiles = interactWithInputString(savedWorld);
+//                        newWorld.moveEnemies();
                         ter.renderFrame(renderTiles);
                         seedInputRunning = false;
                         gameRunning = true;
@@ -202,21 +203,17 @@ public class Engine {
             if (StdDraw.hasNextKeyTyped()) {
                 Character last = StdDraw.nextKeyTyped();
                 wasd(last);
-                System.out.println("Gamerunning: " + savedWorld);
+//                System.out.println("Gamerunning: " + savedWorld);
                 int i = savedWorld.length() - 2;
                 System.out.println("last: " + last);
+
                 if (savedWorld.charAt(i) == ':' && (savedWorld.charAt(i + 1) == 'q'
                         || savedWorld.charAt(i + 1) == 'Q')) {
                     System.out.println("quit");
 
-                    System.out.println(savedWorld);
-                    System.out.println(savedWorld.charAt(0));
-                    System.out.println(load());
-
                     if (savedWorld.charAt(0) == 'l'
                             || savedWorld.charAt(0) == 'L') {
                         save(load() + savedWorld.substring(1, savedWorld.length() - 2));
-
                     }
 
                     if (savedWorld.charAt(0) == 'n'
@@ -233,8 +230,10 @@ public class Engine {
 
   //after your move -- for when player is next to enemy before moving to it
                 tryGameOver();
-                newWorld.moveEnemies();
-//  //after their move -- for when player doesn't move or enemy reaches you first
+                if (last != ':') {
+                    newWorld.moveEnemies();
+                }
+  //after their move -- for when player doesn't move or enemy reaches you first
                 tryGameOver();
                 ter.renderFrame(newWorld.getTeTile());
             }
@@ -308,9 +307,10 @@ public class Engine {
                 long seed = Long.valueOf(numbersToParse);
                 this.newWorld = new WorldGenerator(WIDTH, HEIGHT, seed, starterType);
                 finalWorldFrame = newWorld.getTeTile();
+                newWorld.moveEnemies();
 
                 ter.renderFrame(newWorld.getTeTile()); //ERASE
-                moveCharactersN(startIndexwasd, charArray, input);
+                moveCharactersN(startIndexwasd + 1, charArray, input);
             }
 
             if (charArray.get(0).equals('l') || charArray.get(0).equals('L')) {
@@ -340,7 +340,6 @@ public class Engine {
                 save(nsStr.substring(0, nsStr.length() - 2)); //n###swasd
                 drawCanvas();
                 notification("Saved");
-                StdDraw.pause(2000);
                 System.exit(0);
             }
         }
@@ -360,7 +359,6 @@ public class Engine {
                 save(prev + savedString.substring(0, savedString.length() - 2));
                 drawCanvas();
                 notification("Saved");
-                StdDraw.pause(2000);
                 System.exit(0);
             }
         }
@@ -378,9 +376,12 @@ public class Engine {
                     newWorld.thePlayer().setNewPosition(
                             newWorld.thePlayer().moveUp(
                                     newWorld.getTeTile(), newWorld.getPlayer()));
-
+                }
+                if (up.equals(Tileset.LOCKED_DOOR)) {
+                    portalProcess(new Position(newWorld.getPlayer().x(), newWorld.getPlayer().y() + 1));
                 }
                 savedWorld += key.toString();
+                newWorld.addAStep();
                 break;
             }
             case ('S'):
@@ -391,7 +392,11 @@ public class Engine {
                                     newWorld.getTeTile(), newWorld.getPlayer()));
 
                 }
+                if (down.equals(Tileset.LOCKED_DOOR)) {
+                    portalProcess(new Position(newWorld.getPlayer().x(), newWorld.getPlayer().y() - 1));
+                }
                 savedWorld += key.toString();
+                newWorld.addAStep();
                 break;
             }
             case ('A'):
@@ -402,7 +407,11 @@ public class Engine {
                                     newWorld.getTeTile(), newWorld.getPlayer()));
 
                 }
+                if (left.equals(Tileset.LOCKED_DOOR)) {
+                    portalProcess(new Position(newWorld.getPlayer().x() - 1, newWorld.getPlayer().y()));
+                }
                 savedWorld += key.toString();
+                newWorld.addAStep();
                 break;
             }
             case ('D'):
@@ -413,7 +422,12 @@ public class Engine {
                                     newWorld.getTeTile(), newWorld.getPlayer()));
 
                 }
+                if (right.equals(Tileset.LOCKED_DOOR)) {
+                    portalProcess(new Position(newWorld.getPlayer().x() + 1, newWorld.getPlayer().y()));
+                }
+
                 savedWorld += key.toString();
+                newWorld.addAStep();
                 break;
             }
             case (':'): {
@@ -429,13 +443,27 @@ public class Engine {
                 break;
             }
         }
+        StdDraw.pause(15);
 //        System.out.println("Player Location: (" +
 //        newWorld.getPlayer().x() + ", " + newWorld.getPlayer().y() + ")");
     }
 
+    //n is the WASD next movement
+    private void portalProcess(Position n) {
+        //goes to portal, portal disappears
+        newWorld.thePlayer().move(newWorld.getTeTile(), newWorld.getPlayer(), n,
+                Tileset.FLOOR, Tileset.AVATAR);
+        //goes to random portal, deletes avatar in prev place
+        newWorld.thePlayer().move(newWorld.getTeTile(), newWorld.getPlayer(),
+                newWorld.getOtherRandomPortal(new Portal(newWorld.getPlayer())).getPosition(),
+                Tileset.FLOOR, Tileset.AVATAR);
+        newWorld.removePortals(newWorld.getPlayer());
+        newWorld.addPortals(5);
+    }
+
     private void tryGameOver() {
         if (newWorld.isPlayerKilled()) {
-            System.out.print("I'm just a humble farmer.");
+            System.out.print("I'm just a humble flower farmer.");
             System.exit(0); //placeholder for now
         }
     }
@@ -454,7 +482,6 @@ public class Engine {
         StdDraw.text(MWIDTH / 2, MHEIGHT / 2, "Put a number");
         StdDraw.show();
     }
-
 
     private void drawMenu() {
         Font title = new Font("Times New Roman", Font.BOLD, 40);
@@ -513,6 +540,7 @@ public class Engine {
         StdDraw.clear(Color.BLACK);
         if ((int) StdDraw.mouseX() < WIDTH && (int) StdDraw.mouseY() < HEIGHT) {
             TETile mPos = wg.getTeTile()[(int) StdDraw.mouseX()][(int) StdDraw.mouseY()];
+            Position p = new Position((int) StdDraw.mouseX(), (int) StdDraw.mouseY());
             ter.renderFrame(newWorld.getTeTile());
             StdDraw.enableDoubleBuffering();
             StdDraw.setPenColor(Color.white);
@@ -524,10 +552,25 @@ public class Engine {
                 StdDraw.text(WIDTH / 2, HEIGHT - 1, "Floor");
             } else if (mPos.equals(Tileset.FLOWER)) {
                 StdDraw.text(WIDTH / 2, HEIGHT - 1, "Flower");
+                Enemy enemy = newWorld.getEnemyAt(p);
+                StdDraw.text(WIDTH / 6, HEIGHT - 1, "Enemy's Next Move: " + convertToString(enemy, enemy.getNextMove()));
             } else {
                 StdDraw.text(WIDTH / 2, HEIGHT - 1, "Nothing");
             }
+            StdDraw.text(WIDTH / 1.5, HEIGHT - 1, "Steps taken: " + newWorld.getSteps());
             StdDraw.show();
+        }
+    }
+
+    private String convertToString(Enemy e, Position n) {
+        if (n.y() > e.getPosition().y()) {
+            return "Up";
+        } else if (n.y() < e.getPosition().y()) {
+            return "Down";
+        } else if (n.x() > e.getPosition().x()) {
+            return "Right";
+        } else {
+            return "Left";
         }
     }
 

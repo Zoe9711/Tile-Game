@@ -22,9 +22,13 @@ public class WorldGenerator implements Serializable {
     private HallwayGenerator hallGenerator;
     private Player player;
     private LinkedList<Enemy> enemies;
+    private LinkedList<Portal> portals;
     private HashMap<GameCharacter, Position> charToPositions;
     private WeightedDirectedGraph aStarGraph;
     private TETile type;
+    private Random portalRand;
+    private Integer steps;
+    private int portalNum;
 
     public WorldGenerator(int w, int h, long seed, TETile type) {
         this.width = w;
@@ -37,6 +41,10 @@ public class WorldGenerator implements Serializable {
         this.enemies = new LinkedList<>();
         this.charToPositions = new HashMap<>();
         this.type = type;
+        this.portals = new LinkedList<>();
+        this.portalRand = new Random(seed + 1);
+        this.steps = 0;
+        this.portalNum = 0;
 
         this.world = new TETile[width][height];
         for (int x = 0; x < width; x += 1) {
@@ -52,8 +60,19 @@ public class WorldGenerator implements Serializable {
         this.aStarGraph = new WeightedDirectedGraph(this, w, h);
 
         addPlayers();
-        addEnemies();
+        addEnemies(4);
+        addPortals(5);
     }
+
+    public void addAStep() {
+        this.steps += 1;
+    }
+
+    public String getSteps() {
+        return this.steps.toString();
+    }
+
+    public void setPortals(LinkedList<Portal> portals) { this.portals = portals; }
 
     public TETile[][] getTeTile() {
         return this.world;
@@ -85,6 +104,56 @@ public class WorldGenerator implements Serializable {
 
     private long seed() {
         return this.seed;
+    }
+
+    public Portal getOtherRandomPortal(Portal curr) {
+        Integer randomIndex = portalIndex(curr.getPosition());
+        while (randomIndex.equals(portalIndex(curr.getPosition()))) {
+            randomIndex = portalRand.nextInt(portalNum);
+        }
+        return portals.get(randomIndex);
+    }
+
+    private int portalIndex(Position n) {
+        int i = 0;
+        for (Portal p : portals) {
+            if (p.equals(new Portal(n))) {
+                return i;
+            }
+            i += 1;
+        }
+        return 0;
+    }
+
+    public void removePortals(Position avatarFinalPos) {
+        for (Portal p : portals) {
+            if (p.getPosition() != avatarFinalPos) {
+                world[p.getStartX()][p.getStartY()] = Tileset.FLOOR;
+            }
+        }
+        this.portals.clear();
+    }
+
+    public void addPortals(int number) {
+        this.portalNum = number;
+        ArrayList<Position> occupied = new ArrayList<>();
+        occupied.add(getPlayer());
+        for (Enemy e : enemies) {
+            occupied.add(e.getPosition());
+        }
+        int portalsAddedCorrectly = 0;
+        while (portalsAddedCorrectly != number) {
+            Room ranRm = roomList.get(portalRand.nextInt(roomList.size()));
+            Position portalP = ranRm.ranPosInRoom(portalRand);
+            if (!occupied.contains(portalP)) {
+                Portal portalToAdd = new Portal(portalP);
+                portalToAdd.addOnMap(this.world, portalP, null);
+                this.portals.add(portalToAdd);
+//                this.charToPositions.put(portalToAdd, portalP);
+                occupied.add(portalP);
+                portalsAddedCorrectly += 1;
+            }
+        }
     }
 
     public void addRooms(int numOfRoom) {
@@ -123,17 +192,17 @@ public class WorldGenerator implements Serializable {
         this.charToPositions.put(this.player, playerP);
     }
 
-    public void addEnemies() {
+    public void addEnemies(int amt) {
         Random random = new Random(seed());
         random.nextInt(); //get rid of player's place
         ArrayList<Position> occupied = new ArrayList<>();
         int enemiesAddedCorrectly = 0;
-        while (enemiesAddedCorrectly != 4) {
+        while (enemiesAddedCorrectly != amt) {
             Room ranRm = roomList.get(random.nextInt(roomList.size()));
             Position enemyP = ranRm.ranPosInRoom(random);
             if (!occupied.contains(enemyP) && !enemyP.equals(player.getPosition())) {
                 occupied.add(enemyP);
-                Enemy enemyToAdd = new Enemy(enemyP);
+                Enemy enemyToAdd = new Enemy(enemyP, enemiesAddedCorrectly);
                 enemyToAdd.addOnMap(this.world, enemyP, Tileset.FLOWER);
                 this.enemies.add(enemyToAdd);
                 enemiesAddedCorrectly += 1;
@@ -141,15 +210,26 @@ public class WorldGenerator implements Serializable {
             }
 
         }
+    }
 
+    public Enemy getEnemyAt(Position mPos) {
+        for (Enemy e : enemies) {
+            if (mPos.equals(e.getPosition())) {
+                return e;
+            }
+        }
+        return null;
     }
 
     //AStar on each enemy, move that way and update positions +
     // keep moving for about 3 or less spots before calling this method again
     public void moveEnemies() {
         for (Enemy enemy : enemies) {
-            System.out.println(enemy.getStartX() + ", "
-                    + enemy.getStartY() + " BEFORE ASTAR POSITION");
+//            System.out.println(enemy.getStartX() + ", "
+//                    + enemy.getStartY() + " BEFORE ASTAR POSITION");
+            enemy.move(world, enemy.getPosition(), enemy.getNextMove(), Tileset.FLOWER, null);
+            this.charToPositions.put(enemy, enemy.getNextMove());
+
             Position up = new Position(enemy.getStartX(), enemy.getStartY() + 1);
             Position down = new Position(enemy.getStartX(), enemy.getStartY() - 1);
             Position left = new Position(enemy.getStartX() - 1, enemy.getStartY());
@@ -163,7 +243,9 @@ public class WorldGenerator implements Serializable {
             ArrayList<Position> wasdP = new ArrayList<>();
             //get rid of any walls, can't go there! Don't estimate it.
             for (Position p : wasd) {
-                if (!world[p.x()][p.y()].equals(Tileset.WALL)) {
+                if (!world[p.x()][p.y()].equals(Tileset.WALL)
+                        && !world[p.x()][p.y()].equals(Tileset.FLOWER)
+                        && !world[p.x()][p.y()].equals(Tileset.LOCKED_DOOR)) {
                     wasdP.add(p);
                 }
             }
@@ -178,17 +260,14 @@ public class WorldGenerator implements Serializable {
             }
 
             // Compare for  each "moves needed" and go for that position
-
             Position bestPos = wasdP.get(0);
             for (Position p : wasdP) {
                 if (movesFour.get(p) < movesFour.get(bestPos)) {
                     bestPos = p;
                 }
             }
-            System.out.println(bestPos.x() + ", " + bestPos.y() + " AFTER ASTAR POSITION");
-            this.charToPositions.put(enemy, bestPos);
-            enemy.move(world, enemy.getPosition(), bestPos, Tileset.FLOWER, null);
-            charToPositions.put(enemy, bestPos);
+//            System.out.println(bestPos.x() + ", " + bestPos.y() + " AFTER ASTAR POSITION");
+            enemy.setNextMove(bestPos);
         }
     }
 
