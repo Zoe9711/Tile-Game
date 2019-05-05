@@ -222,7 +222,7 @@ public class Engine {
                     }
 
                     drawCanvas();
-                    notification("Saved");
+                    notification("Saved with steps taken: " + newWorld.getSteps());
                     StdDraw.pause(2000);
                     gameRunning = false;
                     System.exit(0);
@@ -452,11 +452,11 @@ public class Engine {
     private void portalProcess(Position n) {
         //goes to portal, portal disappears
         newWorld.thePlayer().move(newWorld.getTeTile(), newWorld.getPlayer(), n,
-                Tileset.FLOOR, Tileset.AVATAR);
+                Tileset.FLOOR, starterType);
         //goes to random portal, deletes avatar in prev place
         newWorld.thePlayer().move(newWorld.getTeTile(), newWorld.getPlayer(),
                 newWorld.getOtherRandomPortal(new Portal(newWorld.getPlayer())).getPosition(),
-                Tileset.FLOOR, Tileset.AVATAR);
+                Tileset.FLOOR, starterType);
         newWorld.removePortals(newWorld.getPlayer());
         newWorld.addPortals(5);
     }
@@ -550,6 +550,8 @@ public class Engine {
                 StdDraw.text(WIDTH / 2, HEIGHT - 1, "Wall");
             } else if (mPos.equals(Tileset.FLOOR)) {
                 StdDraw.text(WIDTH / 2, HEIGHT - 1, "Floor");
+            } else if (mPos.equals(Tileset.LOCKED_DOOR)) {
+                StdDraw.text(WIDTH / 2, HEIGHT - 1, "Portal");
             } else if (mPos.equals(Tileset.FLOWER)) {
                 StdDraw.text(WIDTH / 2, HEIGHT - 1, "Flower");
                 Enemy enemy = newWorld.getEnemyAt(p);
